@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('navBar_footer.navBar');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
