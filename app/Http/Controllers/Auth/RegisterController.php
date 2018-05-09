@@ -52,6 +52,8 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required|integer',
+            'profile_photo' => 'mimes:jpeg,jpg,png|nullable|max:1999',
         ]);
     }
 
@@ -63,10 +65,26 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if(count($data) == 7){
+            // Get filename with the extension
+            $filenameWithExt = $data['profile_photo']->getClientOriginalName();
+            // Get filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get file extension
+            $extension = $data['profile_photo']->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore= $filename.'_'.time().'.'.$extension;
+            // Upload Image
+            $path = $data['profile_photo']->storeAs('public/profiles', $fileNameToStore);
+        } else {
+            $fileNameToStore = null;
+        }
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'profile_photo' => $data['profile_photo'] = $fileNameToStore,
         ]);
     }
 }
