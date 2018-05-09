@@ -1,7 +1,12 @@
-<!DOCTYPE doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="{{ app()->getLocale() }}">
+<head>
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>{{ config('app.name', 'Laravel') }}</title>
+
+    <meta charset="utf-8">
             <meta content="width=device-width, initial-scale=1" name="viewport">
                 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
@@ -11,51 +16,50 @@
                 </link>
             </meta>
         </meta>
-    </head>
-    <body>
+</head>
+<body>
+    <div id="app">
         <nav class="navbar navbar-inverse">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
-                        WebSiteName
-                    </a>
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-left">
+
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                        @guest
+                            <li><a class="active" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                            <li><a class="active" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <a href="#">
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            Page 1
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            Page 2
-                        </a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-user">
-                            </span>
-                            Sign Up
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-log-in">
-                            </span>
-                            Login
-                        </a>
-                    </li>
-                </ul>
+            </div>
             </div>
         </nav>
         <script src="js/main.js">
         </script>
-    </body>
-</html>

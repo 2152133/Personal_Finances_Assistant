@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('navBar_footer.navBar');
+    return view('pages.index');
 });
 
 Auth::routes();
