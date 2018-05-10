@@ -20,6 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 /*US26*/
-Route::get('/me/dashboard', function () {
-    return view('pages.dashboard');
-});
+Route::get('/me/dashboard', 'DashboardController@index');
