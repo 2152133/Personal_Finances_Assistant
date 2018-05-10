@@ -1,5 +1,5 @@
 @include('navBar_footer.navBar')
-    <main class="py-4">
+    <main class="container">
         @yield('content')
     </main>
 @include('navBar_footer.footer')
