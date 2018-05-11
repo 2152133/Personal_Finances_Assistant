@@ -20,14 +20,24 @@
         <div class="col-md-6 text-center">
             <div class="card">
                 
-                <div class="card-header">Your total balance</div>
+                <h1 class="card-header">Your total balance</h1>
                 
-                {{$totalBalance}}€
+                <h2>{{$totalBalance}}€</h2>
             
             </div>
         </div>
 
         <div class="col-md-6 text-center">
+            <div class="col-md-3 text-right"></div>
+            <div class="col-md-3 text-right"></div>
+            <div class="col-md-3 text-right">
+                <button type="button" class="btn btn-default">View my accounts</button>
+            </div>
+            <div class="col-md-3 text-right">
+                
+
+                <button type="button" class="btn btn-default">Create account</button>
+            </div>
             <table class="table table-striped">
             <thead>
                 <tr>
@@ -52,7 +62,7 @@
     
     <div class="row justify-content-center">
         <div class="col-md-6 text-center">
-            <button type="button" class="btn btn-default">View my accounts</button>
+            
         </div>
         <div class="col-md-6 text-center">
             <button type="button" class="btn btn-default">View my associate members</button>
