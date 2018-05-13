@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'profile_photo',
+        'name', 'admin', 'blocked', 'email', 'password', 'phone', 'profile_photo',
     ];
 
     /**
@@ -27,4 +27,27 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function type()
+    {
+        switch ($this->admin) {
+            case 0:
+                return 'User';
+            case 1:
+                return 'Admin';
+        }
+
+        return 'Unknown';
+    }
+
+    public function status()
+    {
+        switch ($this->blocked) {
+            case 0:
+                return 'Unlocked';
+            case 1:
+                return 'Blocked';
+        }
+
+        return 'Unknown';
+    }
 }
