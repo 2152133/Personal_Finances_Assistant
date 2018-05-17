@@ -4,7 +4,13 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+<<<<<<< HEAD
     <title>PFA @yield('title')</title>
+=======
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+>>>>>>> us6
 
     <meta charset="utf-8">
             <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -25,6 +31,11 @@
                 <a class="navbar-brand" href="{{ url('/') }}">
                     PFA
                 </a>
+                @can('administrate')
+                <a class="navbar-brand" href="{{ route('users') }}">
+                    List users
+                </a>
+                @endcan
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-left ">
@@ -61,5 +72,8 @@
             </div>
             </div>
         </nav>
+    </div>
+</body>
+</html>
         <script src="js/main.js">
         </script>

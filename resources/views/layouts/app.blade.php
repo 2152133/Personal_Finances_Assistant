@@ -1,5 +1,5 @@
 @include('navBar_footer.navBar')
-    <div class="container">
-        @yield('content')
-    </div>
+    <main class="container">
+            @yield('content')
+        </main>
 @include('navBar_footer.footer')
