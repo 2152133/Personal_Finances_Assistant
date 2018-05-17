@@ -4,7 +4,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+
     <title>PFA @yield('title')</title>
+
 
     <meta charset="utf-8">
             <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -23,7 +25,9 @@
             <div class="container-fluid">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
+
                     PFA
+
                 </a>
                 @can('administrate')
                 <a class="navbar-brand" href="{{ route('users') }}">

@@ -18,6 +18,11 @@ Route::get('/', function () {
 Auth::routes();
 
 
+
+/*US14*/
+Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
+Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+
 /*US26*/
 Route::get('/me/dashboard', 'DashboardController@index');
 
@@ -30,5 +35,6 @@ Route::patch('/users/{user}/block', 'UserController@block');
 Route::patch('/users/{user}/unblock', 'UserController@unblock');
 Route::patch('/users/{user}/promote', 'UserController@promote');
 Route::patch('/users/{user}/demote', 'UserController@demote');
+
 
 
