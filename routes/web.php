@@ -42,8 +42,17 @@ Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProf
 Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
 // US14 -> accounts
-Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
 Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+Route::get('/accounts/{user}/opened', function($user){
+	return view();
+});
+Route::get('/accounts/{user}/closed', function($user){
+	return view();
+});
+//Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
+
+// US20 -> movements
+Route::get('/movements/{account}', 'MovementsController@listMovements');
 
 // US26 user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index');

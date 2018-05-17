@@ -12,19 +12,22 @@
             <th>Description</th>
             <th>Start Balance</th>
             <th>Current Balance</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     @foreach ($accounts as $account)
         <tr>
-            <td>{{$account->email}}</td>
-            <td>{{$account->name}}</td>
-            <td>{{$account->created_at}}</td>
-            <td>{{$account->typeToStr($account->type) }}</td>
+            <td>{{$account->id}}</td>
+            <td>{{$account->account_type_id}}</td>
+            <td>{{$account->code}}</td>
+            <td>{{$account->description}}</td>
+            <td>{{$account->start_balance}}</td>
+            <td>{{$account->current_balance}}</td>
             <td>
                 <a class="btn btn-xs btn-primary" href="#">Edit</a>
                 <form action="#" method="POST" role="form" class="inline">
-                    <input type="hidden" name="user_id" value="<?= intval($user->user_id) ?>">
+                    <input type="hidden" name="account_id" value="<?= intval($account->id) ?>">
                     <button type="submit" class="btn btn-xs btn-danger">Delete</button>
                 </form>
             </td>
@@ -33,6 +36,6 @@
     </tbody>
     </table>
 @else
-    <h2>No users found</h2>
+    <h2>No Accounts found</h2>
 @endif
 @endsection

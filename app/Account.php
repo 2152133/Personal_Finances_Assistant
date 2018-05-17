@@ -23,52 +23,18 @@ class Account extends Model
         }
     }
 
-    public static function all()
+    public static function allAccounts()
     {
-        $pdo =  Account::dbConn();
+        $accounts = Account::get();
 
-        $sql = "SELECT * FROM accounts";
-        $stmt= $pdo->prepare($sql);
-
-        $stmt->execute();
-
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        User::closeDBConn($pdo);
-
-        return $result;
+        return $accounts;
     }
 
     public static function accountsFromUser($user_id)
     {
-        $pdo =  Account::dbConn();
-
-        $sql = "SELECT * FROM accounts WHERE owner_id = :user_id ";
-        $stmt= $pdo->prepare($sql);
-        $stmt->bindParam(':user_id', $user_id);
-
-        $stmt->execute();
-
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
-
-        User::closeDBConn($pdo);
-
-        return $result;
+        $accounts = Account::where('owner_id', $user_id)->get();
+        return $accounts;
     }
-
-    public static function dbConn() {
-        $host= 'localhost';
-        $dbname= 'Personal_Finances_Assistant_DB';
-        $user= 'homestead';
-        $password= 'secret';
-        $charset= 'utf8';
-        $dsn= "mysql:host=$host;dbname=$dbname;charset=$charset";
-        $opt= [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION];
-        $pdo = new PDO($dsn, $user, $password, $opt);
-        
-        return $pdo; 
-    }
-
 
 
 }
