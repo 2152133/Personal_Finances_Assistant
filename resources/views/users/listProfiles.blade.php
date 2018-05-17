@@ -14,6 +14,9 @@
             <th>
                 User Name
             </th>
+            <th>
+                Association
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +32,17 @@
             </td>
             <td>
                 {{ $user->name }}
+            </td>
+            <td>
+                @if (App\User::find(Auth::user()->id)->associatedMembers->count() != 0 && $user->id == App\User::find(Auth::user()->id)->associatedMembers->toArray()[0]['pivot']['associated_user_id'])
+                    {{ __('Belongs to my group') }}
+                @elseif (App\User::find(Auth::user()->id)->associatedTo->count() != 0 && $user->id == App\User::find(Auth::user()->id)->associatedTo->toArray()[0]['pivot']['main_user_id'])
+                    {{ __('Belongs to his group') }}
+                @elseif ($user->id == Auth::user()->id)
+                    {{ __('My group') }}
+                @else
+                    {{ __('There is no association') }}
+                @endif
             </td>
         </tr>
         @endforeach
