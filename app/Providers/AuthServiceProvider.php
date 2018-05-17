@@ -33,7 +33,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->admin == 1;
         });
 
-        Gate::define('resgisted', function ($user) {
+        Gate::define('update', function ($user) {
             return ($user->admin == 0 || $user->admin == 1);
         });
     }

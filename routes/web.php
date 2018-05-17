@@ -41,6 +41,12 @@ Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProf
 // US11 -> list users profiles (users)
 Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
+// US12 -> list users associated to my group
+Route::get('me/associates', 'UserController@listAssociates')->name('user.listAssociates');
+
+// US13 -> list user associated to other groups
+Route::get('me/associate-of', 'UserController@listAssociateOf')->name('user.listAssociateOf');
+
 // US14 -> accounts
 Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
 Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');

@@ -20,7 +20,6 @@ class UserController extends Controller
     }
 
     public function index(){
-
 		$users = User::All();
 		$pagetitle = "List of Users";
 		$name = \Request::query('name');
@@ -93,19 +92,24 @@ class UserController extends Controller
 
    public function pesquisar()
    {
-	    $search = \Request::get('search'); //<-- we use global request to get the param of URI
-	    $pagetitle = "List of Users";
-	 
-	    $users = User::where('name','like','%'.$search.'%')
-	        ->orderBy('name')
-	        ->paginate(15);
-	 
-	    return view('users.list',compact('users', 'pagetitle'));
-   }	
+        $search = \Request::get('search'); //<-- we use global request to get the param of URI
+     
+        $users = User::where('name','like','%'.$search.'%')
+            ->orderBy('name')
+            ->paginate(15);
+           
+        return view('users.list',compact('users'));
+    }	
 
      public function listProfiles()
     {
-        $users = User::paginate(15);
+        $users = User::All();
+        $name = \Request::query('name');
+
+        $users = User::where('name','like','%'.$name.'%')
+            ->orderBy('name')
+            ->paginate(15);
+
         return view('users.listProfiles', compact('users'));
     }
 
@@ -133,14 +137,14 @@ class UserController extends Controller
 	public function editPassword()
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $this->can('update');
         return view('users.editPassword', compact('user'));
     }
 
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
         $user = Auth::user();
-        $this->can('resgisted');
+        $this->can('update');
 
         $data = $request->validated();
 
@@ -150,5 +154,17 @@ class UserController extends Controller
         return redirect()
             ->route('home')
             ->with('success', 'Password changed successfully.');
+    }
+
+    public function listAssociateOf()
+    {
+        $users = User::all();
+        return view('users.listAssociateOf', compact('users'));
+    }
+
+    public function listAssociates()
+    {
+        $users = User::all();
+        return view('users.listAssociates', compact('users'));
     }
 }
