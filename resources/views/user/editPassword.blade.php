@@ -9,21 +9,22 @@
                     @include('partials.errors')
                 @endif
                 <div class="card-header">
-                    {{ __('Login') }}
+                    {{ __('Change Password') }}
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('login') }}" method="POST">
+                    <form action="{{ route('user.updatePassword') }}" enctype="form-control" method="POST">
                         @csrf
+                        @method('patch')
                         <div class="form-group row">
-                            <label class="col-sm-4 col-form-label text-md-right" for="email">
-                                {{ __('E-Mail Address') }}
+                            <label class="col-md-4 col-form-label text-md-right" for="old_password">
+                                {{ __('Current Password') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email') }}">
-                                    @if ($errors->has('email'))
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="old_password" name="old_password" required="" type="password">
+                                    @if ($errors->has('old_password'))
                                     <span class="invalid-feedback">
                                         <strong>
-                                            {{ $errors->first('email') }}
+                                            {{ $errors->first('old_password') }}
                                         </strong>
                                     </span>
                                     @endif
@@ -32,7 +33,7 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="password">
-                                {{ __('Password') }}
+                                {{ __('New Password') }}
                             </label>
                             <div class="col-md-6">
                                 <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" required="" type="password">
@@ -47,22 +48,19 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
-                                    </label>
-                                </div>
+                            <label class="col-md-4 col-form-label text-md-right" for="password-confirm">
+                                {{ __('Confirm New Password') }}
+                            </label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="password-confirm" name="password_confirmation" required="" type="password">
+                                </input>
                             </div>
                         </div>
                         <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
+                            <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary" type="submit">
-                                    {{ __('Login') }}
+                                    {{ __('Reset Password') }}
                                 </button>
-                                <a class="btn btn-link" href="{{ route('password.request') }}">
-                                    {{ __('Forgot Your Password?') }}
-                                </a>
                             </div>
                         </div>
                     </form>

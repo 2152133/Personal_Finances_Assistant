@@ -11,11 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages.index');
+Route::get('/', function () {	
+    return view('welcome');
 });
 
 Auth::routes();
+
 
 
 
@@ -36,5 +37,20 @@ Route::patch('/users/{user}/unblock', 'UserController@unblock');
 Route::patch('/users/{user}/promote', 'UserController@promote');
 Route::patch('/users/{user}/demote', 'UserController@demote');
 
+
+
+// home page
+Route::get('/home', 'HomeController@index')->name('home');
+
+// change user password
+Route::get('/me/password', 'UserController@editPassword')->name('user.editPassword');
+Route::patch('/me/password', 'UserController@updatePassword')->name('user.updatePassword');
+
+// update user profile
+Route::get('/me/profile', 'UserController@editProfile')->name('user.editProfile');
+Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProfile');
+
+// list profiles
+Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
 

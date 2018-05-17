@@ -15,7 +15,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'admin', 'blocked', 'email', 'password', 'phone', 'profile_photo',
+        'name', 'admin', 'blocked', 'email', 'password', 'phone', 'profile_photo', 'old_password',
+
     ];
 
     /**
@@ -24,8 +25,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'id',
     ];
+
 
     public function type()
     {
@@ -71,6 +73,50 @@ class User extends Authenticatable
         }
 
         return 'Unknown';
+    }
+
+
+    //formatted_type
+    public function getFormattedAdminAttribute()
+    {
+        switch ($this->admin) {
+            case 0:
+                return 'No';
+            case 1:
+                return 'Yes';
+        }
+        return 'Unknown';
+    }
+
+    public function getFormattedBlockedAttribute()
+    {
+        switch ($this->blocked) {
+            case 0:
+                return 'No';
+            case 1:
+                return 'Yes';
+        }
+        return 'Unknown';
+    }
+
+    public function isAdmin()
+    {
+        return $this->admin === '1';
+    }
+
+    public function isRegistered()
+    {
+        return $this->admin === '0';
+    }
+
+    public function associatedMembers()
+    {
+        return $this->belongsToMany('App\User', 'associate_members', 'main_user_id', 'associated_user_id');
+    }
+
+    public function associatedTo()
+    {
+        return $this->belongsToMany('App\User', 'associate_members', 'associated_user_id', 'main_user_id');
     }
 
 }

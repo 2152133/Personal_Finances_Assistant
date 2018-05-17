@@ -5,15 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                @if ($errors->any())
-                    @include('partials.errors')
-                @endif
                 <div class="card-header">
-                    {{ __('Register') }}
+                    {{ __('Edit Profile') }}
                 </div>
                 <div class="card-body">
-                    <form enctype="multipart/form-data" action="{{ route('register') }}" method="POST">
+                    <form enctype="multipart/form-data" action="{{ route('user.updateProfile') }}" method="POST">
                         @csrf
+                        @method('put')
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="name">
                                 {{ __('Name') }}
@@ -47,31 +45,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="password">
-                                {{ __('Password') }}
-                            </label>
-                            <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" required="" type="password">
-                                    @if ($errors->has('password'))
-                                    <span class="invalid-feedback">
-                                        <strong>
-                                            {{ $errors->first('password') }}
-                                        </strong>
-                                    </span>
-                                    @endif
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="password-confirm">
-                                {{ __('Confirm Password') }}
-                            </label>
-                            <div class="col-md-6">
-                                <input class="form-control" id="password-confirm" name="password_confirmation" required="" type="password">
-                                </input>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="phone">
                                 {{ __('Phone Number') }}
                             </label>
@@ -93,7 +66,7 @@
                                 {{ __('Profile Picture') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}">
+                                <input autofocus="" class="form-data{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}">
                                     @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -108,7 +81,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary" type="submit">
-                                    {{ __('Register') }}
+                                    {{ __('Submit') }}
                                 </button>
                             </div>
                         </div>
