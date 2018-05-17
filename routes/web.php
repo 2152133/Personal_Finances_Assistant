@@ -20,6 +20,16 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+
 /*US14*/
 Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
 Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+
+/*US26*/
+Route::get('/me/dashboard', 'DashboardController@index');
+
+
+Route::get('/', 'UserController@count');
+Route::get('/users', 'UserController@index');
+
+

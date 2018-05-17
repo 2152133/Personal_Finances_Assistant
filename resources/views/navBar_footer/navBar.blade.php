@@ -4,7 +4,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Personal Finances Assistant</title>
+
+    <title>PFA @yield('title')</title>
+
 
     <meta charset="utf-8">
             <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -23,12 +25,14 @@
             <div class="container-fluid">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Home
+
+                    PFA
+
                 </a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-left">
-
+                    <ul class="nav navbar-nav navbar-left ">
+                        
                     </ul>
 
                     <!-- Right Side Of Navbar -->
