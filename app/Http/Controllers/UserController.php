@@ -106,14 +106,14 @@ class UserController extends Controller
      public function listProfiles()
     {
         $users = User::paginate(15);
-        return view('user.listProfiles', compact('users'));
+        return view('users.listProfiles', compact('users'));
     }
 
     public function editProfile(User $user)
     {
         $user = Auth::user();
         $this->authorize('update', $user);
-        return view('user.editProfile', compact('user'));
+        return view('users.editProfile', compact('user'));
     }
 
     public function updateProfile(EditUserProfileRequest $request)
@@ -134,7 +134,7 @@ class UserController extends Controller
     {
         $user = Auth::user();
         $this->authorize('update', $user);
-        return view('user.editPassword', compact('user'));
+        return view('users.editPassword', compact('user'));
     }
 
     public function updatePassword(ChangeUserPasswordRequest $request)
