@@ -48,7 +48,7 @@ Route::get('me/associates', 'UserController@listAssociates')->name('user.listAss
 Route::get('me/associate-of', 'UserController@listAssociateOf')->name('user.listAssociateOf');
 
 // US14 -> accounts
-Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
+Route::get('/accounts/start', 'AccountsController@getAllAccountsStart')->name('startAccount');
 Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
 
 // US26 user dashboard page

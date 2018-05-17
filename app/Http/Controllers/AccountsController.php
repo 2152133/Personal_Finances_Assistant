@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Account;
+use App\Account;
 use Illuminate\Support\Facades\Auth;
 
 class AccountsController extends Controller
@@ -23,9 +23,9 @@ class AccountsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getAllAccountsFromUser($user_id)
+    public function getAllAccountsFromUser()
     {
-        $accounts = Account::accountsFromUser($user_id);
+        $accounts = Account::accountsFromUser(Auth::user()->id);
         return view('pages.accounts');
     }
 

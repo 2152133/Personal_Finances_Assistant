@@ -87,6 +87,9 @@
                                     <a class="dropdown-item" href="{{ url('/') }}">
                                         {{ __('Main Page') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('startAccount') }}">
+                                        {{ __('New Account') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('user.editProfile') }}">
                                         {{ __('Edit Profile') }}
                                     </a>
