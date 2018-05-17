@@ -17,7 +17,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/', 'UserController@count');
-Route::get('/users', 'UserController@index');
+
+Route::get('/users', 'UserController@index')->middleware('can:administrate')->name('users');
+
+
+
+Route::patch('/users/{user}/block', 'UserController@block');
+Route::patch('/users/{user}/unblock', 'UserController@unblock');
+Route::patch('/users/{user}/promote', 'UserController@promote');
+Route::patch('/users/{user}/demote', 'UserController@demote');
 

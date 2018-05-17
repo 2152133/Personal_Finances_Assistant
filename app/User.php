@@ -44,11 +44,34 @@ class User extends Authenticatable
     {
         switch ($this->blocked) {
             case 0:
-                return 'Unlocked';
+                return 'Unblock';
             case 1:
-                return 'Blocked';
+                return 'Block';
         }
 
         return 'Unknown';
     }
+
+    public function buttonType(){
+        switch ($this->admin) {
+            case 0:
+                return 'Promote Admin';
+            case 1:
+                return 'Demote User';
+        }
+
+        return 'Unknown';
+    }
+
+    public function buttonStatus(){
+        switch ($this->blocked) {
+            case 0:
+                return 'Block';
+            case 1:
+                return 'Unblock';
+        }
+
+        return 'Unknown';
+    }
+
 }

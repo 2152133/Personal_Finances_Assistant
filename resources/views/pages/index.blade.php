@@ -6,7 +6,6 @@
             <img alt="Generic placeholder image" class="rounded-circle" height="140" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="140">
                 <h2>
                     Total users registados
-                    {{ count($users) }}
                 </h2>
                 <p>
                     <a class="btn btn-secondary" href="#" role="button">
