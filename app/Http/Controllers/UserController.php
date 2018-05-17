@@ -31,9 +31,9 @@ class UserController extends Controller
 			->where('admin','like','%'.$admin.'%')
 			->where('blocked','like','%'.$blocked.'%')
 	        ->orderBy('name')
-	        ->paginate(20);
+	        ->paginate(15);
 
-		return view('users.list', compact('users', 'pagetitle'));
+		return view('users.list', compact('users'));
 		//dd($this);
 
     }
@@ -98,7 +98,7 @@ class UserController extends Controller
 	 
 	    $users = User::where('name','like','%'.$search.'%')
 	        ->orderBy('name')
-	        ->paginate(20);
+	        ->paginate(15);
 	 
 	    return view('users.list',compact('users', 'pagetitle'));
    }	
@@ -140,7 +140,8 @@ class UserController extends Controller
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $this->can('resgisted');
+
         $data = $request->validated();
 
         $user->password = Hash::make($request->get('password'));

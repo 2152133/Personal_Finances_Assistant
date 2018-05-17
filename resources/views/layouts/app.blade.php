@@ -55,6 +55,13 @@
                                 </a>
                             </li>
                             @else
+                            @can('administrate')
+                                <li>
+                                    <a class="nav-link" href="{{ route('users') }}">
+                                        {{ __('List users') }}
+                                    </a>
+                                </li>
+                            @endcan
                             <li>
                                 <a class="nav-link" href="{{ route('user.listProfiles') }}">
                                     {{ __('Show users') }}

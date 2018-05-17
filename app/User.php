@@ -75,40 +75,6 @@ class User extends Authenticatable
         return 'Unknown';
     }
 
-
-    //formatted_type
-    public function getFormattedAdminAttribute()
-    {
-        switch ($this->admin) {
-            case 0:
-                return 'No';
-            case 1:
-                return 'Yes';
-        }
-        return 'Unknown';
-    }
-
-    public function getFormattedBlockedAttribute()
-    {
-        switch ($this->blocked) {
-            case 0:
-                return 'No';
-            case 1:
-                return 'Yes';
-        }
-        return 'Unknown';
-    }
-
-    public function isAdmin()
-    {
-        return $this->admin === '1';
-    }
-
-    public function isRegistered()
-    {
-        return $this->admin === '0';
-    }
-
     public function associatedMembers()
     {
         return $this->belongsToMany('App\User', 'associate_members', 'main_user_id', 'associated_user_id');

@@ -1,13 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div>
-    @can('create', App\User::class)
-    <a class="btn btn-primary" href="{{route('users.create')}}">
-        Add user
-    </a>
-    @endcan
-</div>
+
 @if (count($users))
 <div class="container">
 <table class="table table-striped">
@@ -22,7 +16,7 @@
             </th>
         </tr>
     </thead>
-    <tbody class="">
+    <tbody>
         @foreach ($users as $user)
         <tr>
             <td>
