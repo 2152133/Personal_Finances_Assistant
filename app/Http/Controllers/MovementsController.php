@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Movement;
+use App\MovementCategory;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,5 +28,10 @@ class MovementsController extends Controller
 		}
     	
     	return view('pages.listMovements', compact('movements', 'account_id'));
+    }
+
+    public function showAddMovementForm($account_id){
+        $movement_categories = MovementCategory::all();
+    	return view('pages.addMovement', compact('account_id', 'movement_categories'));
     }
 }

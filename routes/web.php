@@ -56,7 +56,7 @@ Route::get('/movements/{account}', 'MovementsController@listMovements');
 
 // US21 -> movements
 Route::get('/movements/{account}/create', 'MovementsController@showAddMovementForm');
-Route::post('/movements/{account}/create', 'MovementsController@addMovement');
+Route::post('/movements/{account}/create', 'MovementsController@addMovement')->name('addMovement');
 Route::get('/movements/{account}/{movement}', 'MovementsController@showEditMovementForm');
 Route::put('/movements/{account}/{movement}', 'MovementsController@editMovement');
 Route::delete('/movements/{account}/{movement}', 'MovementsController@deleteMovement');
