@@ -31,7 +31,7 @@ class UserController extends Controller
 			->where('blocked','like','%'.$blocked.'%')
 	        ->orderBy('name')
 	        ->paginate(15);
-
+        
 		return view('users.list', compact('users'));
 		//dd($this);
 
@@ -116,43 +116,42 @@ class UserController extends Controller
     public function editProfile(User $user)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $user->can('update');
         return view('users.editProfile', compact('user'));
     }
 
     public function updateProfile(EditUserProfileRequest $request)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $user->can('update');
         $data = $request->validated();
 
         $user->fill($data);
         $user->save();
 
         return redirect()
-            ->route('home')
+            ->route('dashboard')
             ->with('success', 'Profile edited successfully.');
     }
 
 	public function editPassword()
     {
         $user = Auth::user();
-        $this->can('update');
+        $user->can('update');
         return view('users.editPassword', compact('user'));
     }
 
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
         $user = Auth::user();
-        $this->can('update');
-
+        $user->can('update');
         $data = $request->validated();
 
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
         return redirect()
-            ->route('home')
+            ->route('dashboard')
             ->with('success', 'Password changed successfully.');
     }
 

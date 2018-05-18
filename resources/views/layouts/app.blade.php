@@ -55,6 +55,21 @@
                                 </a>
                             </li>
                             @else
+                                <li>
+                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name }}>
+                                        {{ __('List my accounts') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name.'/opened' }}>
+                                        {{ __('List my opened accounts') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name.'/closed' }}>
+                                        {{ __('List all my closed accounts') }}
+                                    </a>
+                                </li>
                             @can('administrate')
                                 <li>
                                     <a class="nav-link" href="{{ route('users') }}">
@@ -87,8 +102,8 @@
                                     <a class="dropdown-item" href="{{ url('/') }}">
                                         {{ __('Main Page') }}
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('startAccount') }}">
-                                        {{ __('New Account') }}
+                                    <a class="dropdown-item" href="{{ route('user.createAccount') }}">
+                                        {{ __('Create Account') }}
                                     </a>
                                     <a class="dropdown-item" href="{{ route('user.editProfile') }}">
                                         {{ __('Edit Profile') }}

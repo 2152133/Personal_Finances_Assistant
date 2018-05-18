@@ -47,12 +47,18 @@ Route::get('me/associates', 'UserController@listAssociates')->name('user.listAss
 // US13 -> list user associated to other groups
 Route::get('me/associate-of', 'UserController@listAssociateOf')->name('user.listAssociateOf');
 
-// US14 -> accounts
-Route::get('/accounts/start', 'AccountsController@getAllAccountsStart')->name('startAccount');
-Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+// US14 -> view my accounts (opened/closed)
+Route::get('/accounts/{user}', 'AccountController@listAllAccouts')->name('user.allAccounts');
+Route::get('/accounts/{user}/opened', 'AccountController@listOponedAccouts')->name('user.openedAccounts');;
+Route::get('/accounts/{user}/closed', 'AccountController@listClosedAccouts')->name('user.closedAccounts');;
+
+// US17 -> create account
+Route::get('/account', 'AccountController@create')->name('user.createAccount');
+Route::post('/account', 'AccountController@store')->name('user.storeAccount');
+
 
 // US26 user dashboard page
-Route::get('/me/dashboard', 'DashboardController@index');
+Route::get('/me/dashboard', 'DashboardController@index')->name('dashboard');
 
 
 

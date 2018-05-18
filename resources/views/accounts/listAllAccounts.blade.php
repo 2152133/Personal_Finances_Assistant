@@ -2,34 +2,40 @@
 
 @section('content')
 
-@if (count($users))
+@if (count($accounts))
 <div class="container">
     <h3>
-        @if ($users->count() == 1)
-            {{ $users->count() }} User
+        @if ($accounts->count() == 1)
+            {{ $accounts->count() }} Account
         @else
-            {{ $users->count() }} Users
+            {{ $accounts->count() }} Accounts
         @endif
     </h3>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
-                    User name
+                    Code
                 </th>
                 <th>
-                    Email
+                    Account Type
+                </th>
+                <th>
+                    Current Balance
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (App\User::find(Auth::user()->id)->associatedMembers as $user)
+            @foreach ($accounts as $account)
             <tr>
                 <td>
-                    {{ $user->name }}
+                    {{ $account->code }}
                 </td>
                 <td>
-                    {{ $user->email }}
+                    {{ $account->formatedAccountTypeName() }}
+                </td>
+                <td>
+                    {{ $account->current_balance }}
                 </td>
             </tr>
             @endforeach

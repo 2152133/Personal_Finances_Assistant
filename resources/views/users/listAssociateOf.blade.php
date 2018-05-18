@@ -5,10 +5,10 @@
 @if (count($users))
 <div class="container">
     <h3>
-        @if ($users->total() == 1)
-            {{ $users->total() }} User
+        @if ($users->count() == 1)
+            {{ $users->count() }} User
         @else
-            {{ $users->total() }} Users
+            {{ $users->count() }} Users
         @endif
     </h3>
     <table class="table table-striped">
