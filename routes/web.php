@@ -41,6 +41,7 @@ Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProf
 // US11 -> list users profiles (users)
 Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
+<<<<<<< HEAD
 // US12 -> list users associated to my group
 Route::get('me/associates', 'UserController@listAssociates')->name('user.listAssociates');
 
@@ -56,6 +57,20 @@ Route::get('/accounts/{user}/closed', 'AccountController@listClosedAccouts')->na
 Route::get('/account', 'AccountController@create')->name('user.createAccount');
 Route::post('/account', 'AccountController@store')->name('user.storeAccount');
 
+=======
+// US14 -> accounts
+Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+Route::get('/accounts/{user}/opened', function($user){
+	return view();
+});
+Route::get('/accounts/{user}/closed', function($user){
+	return view();
+});
+//Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
+
+// US20 -> movements
+Route::get('/movements/{account}', 'MovementsController@listMovements');
+>>>>>>> 313818cbef5df7b6aa526497da51e66522fff96b
 
 // US26 user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index')->name('dashboard');
