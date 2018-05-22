@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use app\Account;
+use App\Account;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class AccountsController extends Controller
+class AccountController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,6 +28,20 @@ class AccountsController extends Controller
     {
         $accounts = Account::accountsFromUser($user_id);
         return view('pages.accounts');
+    }
+
+    public function listAllAccouts()
+    {
+        $accounts = DB::table('accounts')
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('owner_id', '=', Auth::user()->id)
+            ->get();
+        
+        return view('accounts.listAllAccounts', compact('accounts'));
+    }
+
+    public function edit ($account){
+    	
     }
 
     public function getAllAccountsStart()

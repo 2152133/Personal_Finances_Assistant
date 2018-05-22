@@ -24,8 +24,8 @@ class UserController extends Controller
 		$users = User::All();
 		$pagetitle = "List of Users";
 		$name = \Request::query('name');
-		$admin = \Request::get('admin');
-		$blocked = \Request::get('blocked');
+		$admin = \Request::query('admin');
+		$blocked = \Request::query('blocked');
 
 		$users = User::where('name','like','%'.$name.'%')
 			->where('admin','like','%'.$admin.'%')
@@ -33,7 +33,7 @@ class UserController extends Controller
 	        ->orderBy('name')
 	        ->paginate(15);
 
-		return view('users.list', compact('users'));
+		return view('users.listUsers', compact('users'));
 		//dd($this);
 
     }
@@ -88,22 +88,9 @@ class UserController extends Controller
 			
 			return redirect()->action('UserController@index');
 		}
-	}
+	}	
 
-
-   public function pesquisar()
-   {
-	    $search = \Request::get('search'); //<-- we use global request to get the param of URI
-	    $pagetitle = "List of Users";
-	 
-	    $users = User::where('name','like','%'.$search.'%')
-	        ->orderBy('name')
-	        ->paginate(15);
-	 
-	    return view('users.list',compact('users', 'pagetitle'));
-   }	
-
-     public function listProfiles()
+    public function listProfiles()
     {
         $users = User::paginate(15);
         return view('users.listProfiles', compact('users'));

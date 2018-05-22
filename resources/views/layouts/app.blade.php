@@ -56,6 +56,11 @@
                                 </a>
                             </li>
                             @else
+                            <li>
+                                <a class="nav-link" href="{{ route('user.allAccounts', Auth::user()) }}">
+                                    {{ __('Show accounts') }}
+                                </a>
+                            </li>
                             @can('administrate')
                                 <li>
                                     <a class="nav-link" href="{{ route('users') }}">

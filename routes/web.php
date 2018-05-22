@@ -42,11 +42,15 @@ Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProf
 Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
 // US14 -> accounts
-Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
-Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
+Route::get('/accounts/start', 'AccountController@getAllAccountsStart');
+//Route::get('/accounts/{user}', 'AccountController@getAllAccountsFromUser');
+Route::get('/accounts/{user}', 'AccountController@listAllAccouts')->name('user.allAccounts');
 
 // US26 user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index');
+
+
+Route::get('/account/{account}', 'AccountController@edit');
 
 
 

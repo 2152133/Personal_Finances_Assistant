@@ -8,7 +8,6 @@
     	<form action="{{ route('users') }}" class="inline" method="get" role="search">
 	        <div class="input-group custom-search-form">
                 <table class="table table-striped">
-                    <title>dsfsd</title>
                     <thead>
                         <th>
                             Name
