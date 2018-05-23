@@ -35,13 +35,16 @@ class AccountController extends Controller
         $accounts = DB::table('accounts')
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('owner_id', '=', Auth::user()->id)
+            ->select('accounts.id', 'accounts.code', 'account_types.name', 'accounts.current_balance' )
             ->get();
         
         return view('accounts.listAllAccounts', compact('accounts'));
     }
 
-    public function edit ($account){
-    	
+    public function edit (Account $account){
+       
+
+        return view('accounts.editAccounts', compact('account'));
     }
 
     public function getAllAccountsStart()
