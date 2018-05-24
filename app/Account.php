@@ -3,38 +3,34 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
 {
-    public $id;
-    public $owner_id;
-    public $account_type_id;
-    public $date;
-    public $code;
-    public $description;
-    public $start_balance;
-    public $current_balance;
-    public $last_movement_date;
+    use SoftDeletes;
 
-    public function __construct(array $attributes = [])
-    {
-        foreach ($attributes as $name => $value) {
-            $this->$name = $value;
-        }
-    }
+    public $timestamps = false;
 
-    public static function allAccounts()
-    {
-        $accounts = Account::get();
+/**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'owner_id', 'account_type_id', 'code', 'deleted_at'
 
-        return $accounts;
-    }
+    ];
 
-    public static function accountsFromUser($user_id)
-    {
-        $accounts = Account::where('owner_id', $user_id)->get();
-        return $accounts;
-    }
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        
+    ];
 
 
+
+    
 }
