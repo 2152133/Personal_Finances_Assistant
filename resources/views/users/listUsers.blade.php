@@ -4,16 +4,9 @@
 
 @if (count($users))
 <div class="container">
-    <h3>
-        @if ($users->total() == 1)
-            {{ $users->total() }} User
-        @else
-            {{ $users->total() }} Users
-        @endif
-    </h3>
     <div>
-    	<form action="{{ route('users') }}" class="inline" method="get" role="search">
-	        <div class="input-group custom-search-form">
+        <form action="{{ route('users') }}" class="inline" method="get" role="search">
+            <div class="input-group custom-search-form">
                 <table class="table table-striped">
                     <thead>
                         <th>
@@ -58,9 +51,9 @@
                         </tr>
                     </tbody>
                 </table>
-	            
-	            
-	        </div>
+                
+                
+            </div>
         </form>
     </div>
     <br>
@@ -80,10 +73,10 @@
                     Status
                 </th>
                 <th>
-                	Change Type
+                    Change Type
                 </th>
                 <th>
-                	Change Status
+                    Change Status
                 </th>
             </tr>
         </thead>
@@ -104,67 +97,36 @@
                 </td>
                 <td>
                     @if ($user->blocked === 0)
-<<<<<<< HEAD
-                    <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
-                        @csrf
-                    @method('patch')
-                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
-                        </input>
-                    </form>
+                        <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
+                            @csrf
+                        @method('patch')
+                            <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
+                            </input>
+                        </form>
                     @else
-                    <form action="{{ action('UserController@unblock', $user->id ) }}" class="inline" method="post">
-                        @csrf
-                    @method('patch')
-                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
-                        </input>
-                    </form>
-                    @endif
-            @if ($user->admin === 0)
-                    <form action="{{ action('UserController@promote', $user->id ) }}" class="inline" method="post">
-                        @csrf
-                    @method('patch')
-                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
-                        </input>
-                    </form>
-                    @else
-                    <form action="{{ action('UserController@demote', $user->id ) }}" class="inline" method="post">
-                        @csrf
-                    @method('patch')
-                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
-                        </input>
-                    </form>
-=======
-	                    <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
-	                        @csrf
-						@method('patch')
-	                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
-	                        </input>
-	                    </form>
-                    @else
-	                    <form action="{{ action('UserController@unblock', $user->id ) }}" class="inline" method="post">
-	                        @csrf
-						@method('patch')
-	                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
-	                        </input>
-	                    </form>
+                        <form action="{{ action('UserController@unblock', $user->id ) }}" class="inline" method="post">
+                            @csrf
+                        @method('patch')
+                            <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
+                            </input>
+                        </form>
                     @endif
                 </td>
                 <td>    
-					@if ($user->admin === 0)
-	                    <form action="{{ action('UserController@promote', $user->id ) }}" class="inline" method="post">
-	                        @csrf
-						@method('patch')
-	                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
-	                        </input>
-	                    </form>
+                    @if ($user->admin === 0)
+                        <form action="{{ action('UserController@promote', $user->id ) }}" class="inline" method="post">
+                            @csrf
+                        @method('patch')
+                            <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
+                            </input>
+                        </form>
                     @else
-	                    <form action="{{ action('UserController@demote', $user->id ) }}" class="inline" method="post">
-	                        @csrf
-						@method('patch')
-	                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
-	                        </input>
-	                    </form>
->>>>>>> 313818cbef5df7b6aa526497da51e66522fff96b
+                        <form action="{{ action('UserController@demote', $user->id ) }}" class="inline" method="post">
+                            @csrf
+                        @method('patch')
+                            <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
+                            </input>
+                        </form>
                     @endif
                 </td>
             </tr>
