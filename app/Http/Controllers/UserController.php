@@ -23,18 +23,17 @@ class UserController extends Controller
 		$users = User::All();
 		$pagetitle = "List of Users";
 		$name = \Request::query('name');
-		$admin = \Request::get('admin');
-		$blocked = \Request::get('blocked');
+		$admin = \Request::query('admin');
+		$blocked = \Request::query('blocked');
 
 		$users = User::where('name','like','%'.$name.'%')
 			->where('admin','like','%'.$admin.'%')
 			->where('blocked','like','%'.$blocked.'%')
 	        ->orderBy('name')
 	        ->paginate(15);
-        
-		return view('users.list', compact('users'));
-		//dd($this);
 
+		return view('users.listUsers', compact('users'));
+		//dd($this);
     }
 
     public function block(User $user){
@@ -99,9 +98,9 @@ class UserController extends Controller
             ->paginate(15);
            
         return view('users.list',compact('users'));
-    }	
+	}	
 
-     public function listProfiles()
+    public function listProfiles()
     {
         $users = User::All();
         $name = \Request::query('name');

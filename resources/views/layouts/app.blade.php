@@ -56,31 +56,31 @@
                                 </a>
                             </li>
                             @else
-                                <li>
-                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name }}>
-                                        {{ __('List my accounts') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name.'/opened' }}>
-                                        {{ __('List my opened accounts') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href={{ '/accounts/'.Auth::user()->name.'/closed' }}>
-                                        {{ __('List all my closed accounts') }}
-                                    </a>
-                                </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.allAccounts', Auth::user()) }}">
+                                    {{ __('All Accounts') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.closedAccounts', Auth::user()) }}">
+                                    {{ __('Closed Accounts') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.openedAccounts', Auth::user()) }}">
+                                    {{ __('Opened Accounts') }}
+                                </a>
+                            </li>
                             @can('administrate')
                                 <li>
                                     <a class="nav-link" href="{{ route('users') }}">
-                                        {{ __('List users') }}
+                                        {{ __('Edit Users') }}
                                     </a>
                                 </li>
                             @endcan
                             <li>
                                 <a class="nav-link" href="{{ route('user.listProfiles') }}">
-                                    {{ __('Show users') }}
+                                    {{ __('Show Users') }}
                                 </a>
                             </li>
                             <li>

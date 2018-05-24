@@ -37,7 +37,11 @@
                     {{ $account->current_balance }}
                 </td>
                 <td>
-                    <a class="btn btn-primary" href="{{ action('AccountController@edit', $account->id) }}">Edit Account</a>
+                    <form action="{{ action('AccountController@close', $account->id) }}" method="post" class="inline">
+                        @csrf
+                        @method('patch')
+                        <input type="submit" class="btn btn-xs btn-danger" value="Close Account">
+                    </form>
                 </td>
             </tr>
             @endforeach

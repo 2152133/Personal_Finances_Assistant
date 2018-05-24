@@ -41,7 +41,6 @@ Route::put('/me/profile', 'UserController@updateProfile')->name('user.updateProf
 // US11 -> list users profiles (users)
 Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles');
 
-<<<<<<< HEAD
 // US12 -> list users associated to my group
 Route::get('me/associates', 'UserController@listAssociates')->name('user.listAssociates');
 
@@ -50,30 +49,32 @@ Route::get('me/associate-of', 'UserController@listAssociateOf')->name('user.list
 
 // US14 -> view my accounts (opened/closed)
 Route::get('/accounts/{user}', 'AccountController@listAllAccouts')->name('user.allAccounts');
-Route::get('/accounts/{user}/opened', 'AccountController@listOponedAccouts')->name('user.openedAccounts');;
-Route::get('/accounts/{user}/closed', 'AccountController@listClosedAccouts')->name('user.closedAccounts');;
+Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('user.openedAccounts');;
+Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('user.closedAccounts');;
+
+// US15 -> close account
+Route::patch('/account/{account}/close', 'AccountController@close');
+
+//US16 -> reopen account
+Route::patch('/account/{account}/reopen', 'AccountController@reopen');
 
 // US17 -> create account
 Route::get('/account', 'AccountController@create')->name('user.createAccount');
 Route::post('/account', 'AccountController@store')->name('user.storeAccount');
 
-=======
-// US14 -> accounts
-Route::get('/accounts/{user}', 'AccountsController@getAllAccountsFromUser');
-Route::get('/accounts/{user}/opened', function($user){
-	return view();
-});
-Route::get('/accounts/{user}/closed', function($user){
-	return view();
-});
-//Route::get('/accounts/start', 'AccountsController@getAllAccountsStart');
+// US18 -> edit accounts
+Route::get('/account/{account}', 'AccountController@edit');
 
 // US20 -> movements
 Route::get('/movements/{account}', 'MovementsController@listMovements');
->>>>>>> 313818cbef5df7b6aa526497da51e66522fff96b
 
 // US26 user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index')->name('dashboard');
+
+
+
+
+
 
 
 
