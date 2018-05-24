@@ -9,30 +9,16 @@ use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getAllAccountsFromUser($user_id)
-    {
-        $accounts = Account::accountsFromUser($user_id);
-        return view('pages.accounts');
-    }
 
     public function listAllAccouts()
     {
-        $accounts = DB::table('accounts')
+        $accounts = Account::withTrashed()
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('owner_id', '=', Auth::user()->id)
             ->select('accounts.id', 'accounts.code', 'account_types.name', 'accounts.current_balance' )
@@ -43,16 +29,44 @@ class AccountController extends Controller
 
     public function edit (Account $account){
        
-
         return view('accounts.editAccounts', compact('account'));
     }
 
-    public function getAllAccountsStart()
+
+    public function close($id)
     {
-        if(Auth::check()){
-            return redirect('accounts/' . Auth::id());
-        } else {
-            return '/home';
-        }
+        $account = Account::find($id);
+        $account->delete();
+
+        return redirect()->action('DashboardController@index');
     }
+
+    public function reopen($id)
+    {
+        $account = Account::withTrashed()
+                ->where('id', '=', $id)
+                ->restore();
+
+        return redirect()->action('DashboardController@index');
+    }
+
+    public function openedAccounts ($account){
+       $accounts = Account::join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('owner_id', '=', Auth::user()->id)
+            ->select('accounts.id', 'accounts.code', 'account_types.name', 'accounts.current_balance' )
+            ->get();
+
+        return view('accounts.openedAccounts', compact('accounts'));
+    }
+
+    public function closedAccounts ($account){
+       $accounts = Account::onlyTrashed()
+            ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
+            ->where('owner_id', '=', Auth::user()->id)
+            ->select('accounts.id', 'accounts.code', 'account_types.name', 'accounts.current_balance' )
+            ->get();
+
+        return view('accounts.closedAccounts', compact('accounts'));
+    }   
+
 }

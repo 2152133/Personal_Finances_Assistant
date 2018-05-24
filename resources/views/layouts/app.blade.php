@@ -58,19 +58,29 @@
                             @else
                             <li>
                                 <a class="nav-link" href="{{ route('user.allAccounts', Auth::user()) }}">
-                                    {{ __('Show accounts') }}
+                                    {{ __('All Accounts') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.closedAccounts', Auth::user()) }}">
+                                    {{ __('Closed Accounts') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.openedAccounts', Auth::user()) }}">
+                                    {{ __('Opened Accounts') }}
                                 </a>
                             </li>
                             @can('administrate')
                                 <li>
                                     <a class="nav-link" href="{{ route('users') }}">
-                                        {{ __('List users') }}
+                                        {{ __('Edit Users') }}
                                     </a>
                                 </li>
                             @endcan
                             <li>
                                 <a class="nav-link" href="{{ route('user.listProfiles') }}">
-                                    {{ __('Show users') }}
+                                    {{ __('Show Users') }}
                                 </a>
                             </li>
                             <li class="nav-item dropdown">

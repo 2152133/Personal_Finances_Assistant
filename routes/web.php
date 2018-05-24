@@ -43,14 +43,28 @@ Route::get('/profiles', 'UserController@listProfiles')->name('user.listProfiles'
 
 // US14 -> accounts
 Route::get('/accounts/start', 'AccountController@getAllAccountsStart');
-//Route::get('/accounts/{user}', 'AccountController@getAllAccountsFromUser');
 Route::get('/accounts/{user}', 'AccountController@listAllAccouts')->name('user.allAccounts');
+Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('user.openedAccounts');
+Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('user.closedAccounts');
 
-// US26 user dashboard page
+// US15 -> close account
+Route::patch('/account/{account}/close', 'AccountController@close');
+
+//US16 -> reopen account
+Route::patch('/account/{account}/reopen', 'AccountController@reopen');
+
+// US18 -> edit accounts
+Route::get('/account/{account}', 'AccountController@edit');
+
+
+
+// US26 -> user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index');
 
 
-Route::get('/account/{account}', 'AccountController@edit');
+
+
+
 
 
 
