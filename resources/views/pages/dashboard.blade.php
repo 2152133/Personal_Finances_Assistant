@@ -3,6 +3,9 @@
 @section('title', '- Dashboard')
 @section('content')
 <div class="container">
+    @if(session('success'))
+            @include('partials.success')
+        @endif
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
@@ -32,7 +35,7 @@
             <div class="col-md-3 text-right"></div>
             <div class="col-md-3 text-right"></div>
             <div class="col-md-3 text-right">
-                <button type="button" class="btn btn-default">View my accounts</button>
+                 <button type="button" class="btn btn-default">View all my accounts</a>
             </div>
             <div class="col-md-3 text-right">
                 
@@ -50,8 +53,8 @@
                 @foreach ($userAccounts as $account)
                     <tr>
                         <td>{{$account->account_type_id}}</td> 
-                        
-                        <td>{{strval(round($account->current_balance/$totalBalance*100))}}%</td>
+                        {{-- ERRO: divisao por zero --}}
+                        <td>{{strval({{-- round($account->current_balance/$totalBalance*100) --}}0)}}%</td>
                     </tr>
                 @endforeach
             </tbody>

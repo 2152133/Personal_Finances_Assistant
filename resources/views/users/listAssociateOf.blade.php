@@ -1,43 +1,43 @@
 @extends('layouts.app')
+
 @section('content')
 
-@if (count($accounts))
+@if (count($users))
 <div class="container">
     <h3>
-        @if ($accounts->count() == 1)
-            {{ $accounts->count() }} Account
+        @if ($users->count() == 1)
+            {{ $users->count() }} User
         @else
-            {{ $accounts->count() }} Accounts
+            {{ $users->count() }} Users
         @endif
     </h3>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th>
-                    Code
+                    User name
                 </th>
                 <th>
-                    Account Type
+                    Email
                 </th>
                 <th>
-                    Current Balance
+                    User Accounts
                 </th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($accounts as $account)
+            @foreach (App\User::find(Auth::user()->id)->associatedTo as $user)
             <tr>
                 <td>
-                    {{ $account->code }}
+                    {{ $user->name }}
                 </td>
                 <td>
-                    {{ $account->name }}
+                    {{ $user->email }}
                 </td>
                 <td>
-                    {{ $account->current_balance }}
-                </td>
-                <td>
-                    <a class="btn btn-primary" href="{{ action('AccountController@edit', $account->id) }}">Edit Account</a>
+                    <a href="{{ url('/accounts/'.$user->name) }}">
+                        List of accounts
+                    </a>
                 </td>
             </tr>
             @endforeach

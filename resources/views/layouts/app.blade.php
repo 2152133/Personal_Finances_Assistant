@@ -30,7 +30,7 @@
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a class="navbar-brand" href="{{ url('me/dashboard') }}">
                         Finances Assistance
                     </a>
                     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
@@ -83,6 +83,16 @@
                                     {{ __('Show Users') }}
                                 </a>
                             </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.listAssociates') }}">
+                                    {{ __('My Group') }}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="nav-link" href="{{ route('user.listAssociateOf') }}">
+                                    {{ __('Groups') }}
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="navbarDropdown" role="button" v-pre="">
                                     {{ Auth::user()->name }}
@@ -90,6 +100,18 @@
                                     </span>
                                 </a>
                                 <div aria-labelledby="navbarDropdown" class="dropdown-menu">
+                                    <a class="dropdown-item" href="{{ url('/') }}">
+                                        {{ __('Main Page') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('user.createAccount') }}">
+                                        {{ __('Create Account') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('user.editProfile') }}">
+                                        {{ __('Edit Profile') }}
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('user.editPassword') }}">
+                                        {{ __('Change Password') }}
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                         {{ __('Logout') }}
@@ -97,12 +119,6 @@
                                     <form action="{{ route('logout') }}" id="logout-form" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                                    <a class="dropdown-item" href="{{ route('user.editProfile') }}">
-                                        {{ __('Edit Profile') }}
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('user.editPassword') }}">
-                                        {{ __('Change Password') }}
-                                    </a>
                                 </div>
                             </li>
                             @endguest

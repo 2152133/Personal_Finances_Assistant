@@ -4,6 +4,13 @@
 
 @if (count($users))
 <div class="container">
+    <h3>
+        @if ($users->total() == 1)
+            {{ $users->total() }} User
+        @else
+            {{ $users->total() }} Users
+        @endif
+    </h3>
     <div>
     	<form action="{{ route('users') }}" class="inline" method="get" role="search">
 	        <div class="input-group custom-search-form">
@@ -97,6 +104,36 @@
                 </td>
                 <td>
                     @if ($user->blocked === 0)
+<<<<<<< HEAD
+                    <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
+                        @csrf
+                    @method('patch')
+                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
+                        </input>
+                    </form>
+                    @else
+                    <form action="{{ action('UserController@unblock', $user->id ) }}" class="inline" method="post">
+                        @csrf
+                    @method('patch')
+                        <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
+                        </input>
+                    </form>
+                    @endif
+            @if ($user->admin === 0)
+                    <form action="{{ action('UserController@promote', $user->id ) }}" class="inline" method="post">
+                        @csrf
+                    @method('patch')
+                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
+                        </input>
+                    </form>
+                    @else
+                    <form action="{{ action('UserController@demote', $user->id ) }}" class="inline" method="post">
+                        @csrf
+                    @method('patch')
+                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
+                        </input>
+                    </form>
+=======
 	                    <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
 	                        @csrf
 						@method('patch')
@@ -127,6 +164,7 @@
 	                        <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
 	                        </input>
 	                    </form>
+>>>>>>> 313818cbef5df7b6aa526497da51e66522fff96b
                     @endif
                 </td>
             </tr>

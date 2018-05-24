@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Policies\UserPolicy;
 use App\User;
+use App\Account;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -12,15 +13,6 @@ use App\Account;
 
 class AuthServiceProvider extends ServiceProvider
 {
-    /**
-     * The policy mappings for the application.
-     *
-     * @var array
-     */
-    protected $policies = [
-        User::class => UserPolicy::class,
-    ];
-
     /**
      * Register any authentication / authorization services.
      *
@@ -34,8 +26,12 @@ class AuthServiceProvider extends ServiceProvider
             return $user->admin == 1;
         });
 
-        Gate::define('resgisted', function ($user) {
-            return ($user->admin == 0 || $user->admin == 1);
+        Gate::define('update', function ($user) {
+             return ($user->admin == 0 || $user->admin == 1);
+        });
+
+        Gate::define('create', function ($user) {
+             return ($user->admin == 0 || $user->admin == 1);
         });
 
         Gate::define('view-account-movements', function ($user, $account_id) {

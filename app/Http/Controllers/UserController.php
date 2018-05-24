@@ -20,7 +20,6 @@ class UserController extends Controller
     }
 
     public function index(){
-
 		$users = User::All();
 		$pagetitle = "List of Users";
 		$name = \Request::query('name');
@@ -35,7 +34,6 @@ class UserController extends Controller
 
 		return view('users.listUsers', compact('users'));
 		//dd($this);
-
     }
 
     public function block(User $user){
@@ -88,54 +86,83 @@ class UserController extends Controller
 			
 			return redirect()->action('UserController@index');
 		}
+	}
+
+
+   public function pesquisar()
+   {
+        $search = \Request::get('search'); //<-- we use global request to get the param of URI
+     
+        $users = User::where('name','like','%'.$search.'%')
+            ->orderBy('name')
+            ->paginate(15);
+           
+        return view('users.list',compact('users'));
 	}	
 
     public function listProfiles()
     {
-        $users = User::paginate(15);
+        $users = User::All();
+        $name = \Request::query('name');
+
+        $users = User::where('name','like','%'.$name.'%')
+            ->orderBy('name')
+            ->paginate(15);
+
         return view('users.listProfiles', compact('users'));
     }
 
     public function editProfile(User $user)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $user->can('update');
         return view('users.editProfile', compact('user'));
     }
 
     public function updateProfile(EditUserProfileRequest $request)
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $user->can('update');
         $data = $request->validated();
 
         $user->fill($data);
         $user->save();
 
         return redirect()
-            ->route('home')
+            ->route('dashboard')
             ->with('success', 'Profile edited successfully.');
     }
 
 	public function editPassword()
     {
         $user = Auth::user();
-        $this->authorize('update', $user);
+        $user->can('update');
         return view('users.editPassword', compact('user'));
     }
 
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
         $user = Auth::user();
-        $this->can('resgisted');
-
+        $user->can('update');
         $data = $request->validated();
 
         $user->password = Hash::make($request->get('password'));
         $user->save();
 
         return redirect()
-            ->route('home')
+            ->route('dashboard')
             ->with('success', 'Password changed successfully.');
+    }
+
+    public function listAssociateOf()
+    {
+        $users = User::all();
+        return view('users.listAssociateOf', compact('users'));
+    }
+
+    public function listAssociates()
+    {
+        $users = User::all();
+        return view('users.listAssociates', compact('users'));
     }
 }

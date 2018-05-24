@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
@@ -11,7 +12,7 @@ class Account extends Model
 
     public $timestamps = false;
 
-/**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -29,8 +30,4 @@ class Account extends Model
     protected $hidden = [
         
     ];
-
-
-
-    
 }
