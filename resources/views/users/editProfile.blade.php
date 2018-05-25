@@ -17,7 +17,7 @@
                                 {{ __('Name') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" required="" type="text" value="{{ old('name') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" required="" type="text" value="{{ old('name', $user->name) }}">
                                     @if ($errors->has('name'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -33,7 +33,7 @@
                                 {{ __('E-Mail Address') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email') }}">
+                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email', $user->email) }}">
                                     @if ($errors->has('email'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -49,7 +49,7 @@
                                 {{ __('Phone Number') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}">
                                     @if ($errors->has('phone'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -66,7 +66,7 @@
                                 {{ __('Profile Picture') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-data{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}">
+                                <input autofocus="" class="form-data{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo', $user->profile_photo) }}">
                                     @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
                                         <strong>

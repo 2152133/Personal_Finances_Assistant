@@ -23,11 +23,8 @@ class AccountController extends Controller
 
     public function create()
     {
-    	$user = Auth::user();
-        $user->can('create');
-
         $account = new Account;
-        return view('accounts.create', compact('account'));
+        return view('accounts.createAccount', compact('account'));
     }
 
 
@@ -82,5 +79,9 @@ class AccountController extends Controller
             ->get();
 
         return view('accounts.closedAccounts', compact('accounts'));
-    }   
+    }
+
+    public function store (){
+
+    }
 }

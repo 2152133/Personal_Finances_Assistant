@@ -21,7 +21,7 @@ class UserController extends Controller
 
     public function index(){
 		$users = User::All();
-		$pagetitle = "List of Users";
+
 		$name = \Request::query('name');
 		$admin = \Request::query('admin');
 		$blocked = \Request::query('blocked');

@@ -12,9 +12,9 @@
                     {{ __('Create New Account') }}
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('user.storeAccount') }}" enctype="multipart/form-data" method="POST">
+                    <form action="{{ route('user.storeAccount') }}" method="post" class="form-group">
                         @csrf
-                        @method('POST')
+                        @method('put')
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="inputType">
                                 {{ __('Account Type') }}
@@ -25,7 +25,7 @@
                                         -- select an option --
                                     </option>
                                     <option {{is_selected(old('account_type_id', $account->account_type_id), '1' )}} value="1">Bank account</option>
-                                        <option {{is_selected(old('account_type_id', $account->account_type_id), '2' )}} value="2">Bank account</option>
+                                        <option {{is_selected(old('account_type_id', $account->account_type_id), '2' )}} value="2">Pocket Money</option>
                                         <option {{is_selected(old('account_type_id', $account->account_type_id), '3' )}} value="3">PayPal account</option>
                                         <option {{is_selected(old('account_type_id', $account->account_type_id), '4' )}} value="4">Credit card</option>
                                         <option {{is_selected(old('account_type_id', $account->account_type_id), '5' )}} value="5">  Meal card</option>
@@ -37,7 +37,7 @@
                                 {{ __('Date') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="name" name="date" required="" type="text" value="{{ old('date') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="name" name="date" required="" type="date" value="{{ old('date') }}">
                                     @if ($errors->has('date'))
                                     <span class="invalid-feedback">
                                         <strong>
