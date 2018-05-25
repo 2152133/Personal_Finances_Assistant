@@ -45,8 +45,10 @@
     </table>
 </div>
 @else
-<h2>
-    No users found
-</h2>
+<div class="container">
+    <h2>
+        No associates of found
+    </h2>
+</div>
 @endif
 @endsection

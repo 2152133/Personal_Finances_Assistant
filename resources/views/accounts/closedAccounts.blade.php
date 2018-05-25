@@ -49,8 +49,10 @@
     </table>
 </div>
 @else
-<h2>
-    No users found
-</h2>
+<div class="container">
+    <h2>
+        No closed accounts found
+    </h2>
+</div>
 @endif
 @endsection
