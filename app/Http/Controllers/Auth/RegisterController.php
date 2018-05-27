@@ -76,10 +76,12 @@ class RegisterController extends Controller
             $fileNameToStore= $filename.'_'.time().'.'.$extension;
             // Upload Image
             $path = $data['profile_photo']->storeAs('public/profiles', $fileNameToStore);
+
+
         } else {
             $fileNameToStore = null;
         }
-        
+         
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

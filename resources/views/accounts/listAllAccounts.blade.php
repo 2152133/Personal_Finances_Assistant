@@ -20,6 +20,9 @@
                     Account Type
                 </th>
                 <th>
+                    Start Balance
+                </th>
+                <th>
                     Current Balance
                 </th>
             </tr>
@@ -34,11 +37,20 @@
                     {{ $account->name }}
                 </td>
                 <td>
+                    {{ $account->start_balance}}
+                </td>
+                <td>
                     {{ $account->current_balance }}
                 </td>
                 <td>
-                    <a class="btn btn-primary" href="{{ action('AccountController@edit', $account->id) }}">Edit Account</a>
-                </td>
+                    <a class="btn btn-xs btn-primary" href="{{ action('AccountController@edit', $account->id) }}">Edit Account</a>
+                    <a class="btn btn-xs btn-primary" href="{{ action('MovementController@listAllMovements', $account->id) }}">View Movements</a>
+                    <form action="{{ action('AccountController@delete', $account) }}" method="post" class="inline">
+                        @csrf
+                        @method('delete')
+                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                    </form> 
+                </td>  
             </tr>
             @endforeach
         </tbody>

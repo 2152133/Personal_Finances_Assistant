@@ -14,7 +14,6 @@
                 <div class="card-body">
                     <form action="{{ route('user.storeAccount') }}" method="post" class="form-group">
                         @csrf
-                        @method('put')
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="inputType">
                                 {{ __('Account Type') }}
@@ -37,7 +36,7 @@
                                 {{ __('Date') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="name" name="date" required="" type="date" value="{{ old('date') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="date" name="date" type="date" value="{{ old('date') }}">
                                     @if ($errors->has('date'))
                                     <span class="invalid-feedback">
                                         <strong>

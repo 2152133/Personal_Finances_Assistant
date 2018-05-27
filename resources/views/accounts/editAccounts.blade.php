@@ -9,27 +9,36 @@
                     {{ __('Edit Account') }}
                 </div>
                 <div class="card-body">
-                    <form enctype="multipart/form-data" action="{{ route('user.updateProfile') }}" method="POST">
+                    <form action="{{ route('user.updateAccount', $account->id) }}" method="POST">
                         @csrf
                         @method('put')
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="type">
-                                {{ __('Type') }}
+                                {{ __('Account Type') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control" id="type" name="type" type="text" value="{{ old('type', $account->current_balance) }}"></input>
+                                <select class="form-control" id="inputType" name="account_type_id">
+                                    <option disabled="" selected="">
+                                        -- select an option --
+                                    </option>
+                                    <option value="1" {{ old('account_type_id', strval($account->account_type_id)) === '1' ? "selected" : "" }}>Bank account</option>
+                                    <option value="2" {{ old('account_type_id', strval($account->account_type_id)) === '2' ? "selected" : "" }}>Pocket Money</option>
+                                    <option value="3" {{ old('account_type_id', strval($account->account_type_id)) === '3' ? "selected" : "" }}>PayPal account</option>
+                                    <option value="4" {{ old('account_type_id', strval($account->account_type_id)) === '4' ? "selected" : "" }}>Credit card</option>
+                                    <option value="5" {{ old('account_type_id', strval($account->account_type_id)) === '5' ? "selected" : "" }}>Meal card</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="name">
+                            <label class="col-md-4 col-form-label text-md-right" for="code">
                                 {{ __('Code') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" required="" type="text" value="{{ old('name') }}">
-                                    @if ($errors->has('name'))
+                                <input autofocus="" class="form-control{{ $errors->has('code') ? ' is-invalid' : '' }}" id="code" name="code" type="text" value="{{ old('code', $account->code) }}">
+                                    @if ($errors->has('code'))
                                     <span class="invalid-feedback">
                                         <strong>
-                                            {{ $errors->first('name') }}
+                                            {{ $errors->first('code') }}
                                         </strong>
                                     </span>
                                     @endif
@@ -37,15 +46,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="email">
+                            <label class="col-md-4 col-form-label text-md-right" for="description">
                                 {{ __('Description') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email') }}">
-                                    @if ($errors->has('email'))
+                                <input class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}" id="description" name="description"  type="text" value="{{ old('description', $account->description) }}">
+                                    @if ($errors->has('description'))
                                     <span class="invalid-feedback">
                                         <strong>
-                                            {{ $errors->first('email') }}
+                                            {{ $errors->first('description') }}
                                         </strong>
                                     </span>
                                     @endif
@@ -53,15 +62,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="phone">
+                            <label class="col-md-4 col-form-label text-md-right" for="start_balance">
                                 {{ __('Start balance') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone') }}">
-                                    @if ($errors->has('phone'))
+                                <input autofocus="" class="form-control{{ $errors->has('start_balance') ? ' is-invalid' : '' }}" id="start_balance" name="start_balance" type="text" value="{{ old('start_balance', $account->start_balance) }}">
+                                    @if ($errors->has('start_balance'))
                                     <span class="invalid-feedback">
                                         <strong>
-                                            {{ $errors->first('phone') }}
+                                            {{ $errors->first('start_balance') }}
                                         </strong>
                                     </span>
                                     @endif
@@ -71,7 +80,7 @@
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary" type="submit">
-                                    {{ __('Submit') }}
+                                    {{ __('Update') }}
                                 </button>
                             </div>
                         </div>

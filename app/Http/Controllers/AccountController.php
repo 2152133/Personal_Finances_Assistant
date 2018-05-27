@@ -33,15 +33,20 @@ class AccountController extends Controller
         $accounts = Account::withTrashed()
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
             ->where('owner_id', '=', Auth::user()->id)
-            ->select('accounts.id', 'accounts.code', 'account_types.name', 'accounts.current_balance' )
+            ->select('accounts.*','account_types.name')
             ->get();
         
         return view('accounts.listAllAccounts', compact('accounts'));
     }
 
     public function edit (Account $account){
+
+        $account_types = DB::table('account_types')
+                        ->select('account_types.*')
+                        ->get();
+        
        
-        return view('accounts.editAccounts', compact('account'));
+        return view('accounts.editAccounts', compact('account', 'account_types'));
     }
 
 
@@ -81,7 +86,63 @@ class AccountController extends Controller
         return view('accounts.closedAccounts', compact('accounts'));
     }
 
-    public function store (){
+    public function store (Request $request){
+        
+        if ($request->has('cancel')) {
+            return redirect()->action('DashboardController@index');
+        }
 
+        
+        
+        $account = $request->validate([
+            'account_type_id' => 'required',
+            'date' => 'required',
+            'code' => 'required',
+            'start_balance' => 'required',
+            'description' => 'required',
+            ]);
+        
+        DB::table('accounts')->insert([
+            ['owner_id' => Auth::user()->id, 
+             'account_type_id' => $request->account_type_id,
+             'date' => $request->date, 
+             'code' => $request->code,
+             'start_balance' => $request->start_balance, 
+             'description' => $request->description,
+            ]
+        ]);
+        
+        return redirect()->action('DashboardController@index');
+    }
+
+    public function updateAccount (Request $request, $id){
+        
+        if ($request->has('cancel')) {
+            return redirect()->action('DashboardController@index');
+        }
+
+        
+        
+        $account = $request->validate([
+            'account_type_id' => 'required',
+            'code' => 'required',
+            'start_balance' => 'required',
+            'description' => 'required',
+            ]);
+    
+
+        $accountModel = Account::findOrFail($id);
+        $accountModel->fill($account);
+        $accountModel->save();
+            
+        return redirect()->action('DashboardController@index');
+    }
+
+    public function delete($id)
+    {
+        $account = Account::find($id);
+        $account->forceDelete();
+        
+        return redirect()->action('DashboardController@index');
     }
 }

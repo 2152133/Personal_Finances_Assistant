@@ -125,6 +125,8 @@ class UserController extends Controller
         $user->can('update');
         $data = $request->validated();
 
+        
+
         $user->fill($data);
         $user->save();
 

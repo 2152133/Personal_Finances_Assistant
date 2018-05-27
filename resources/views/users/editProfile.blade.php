@@ -66,7 +66,7 @@
                                 {{ __('Profile Picture') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-data{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}">
+                                <input autofocus="" class="form-data{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo', $user->profile_photo) }}">
                                     @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
                                         <strong>

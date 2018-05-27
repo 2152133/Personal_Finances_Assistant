@@ -7,7 +7,7 @@
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| contains the "web" middleware group. Now  something great!
 |
 */
 
@@ -49,11 +49,12 @@ Route::get('me/associate-of', 'UserController@listAssociateOf')->name('user.list
 
 // US14 -> view my accounts (opened/closed)
 Route::get('/accounts/{user}', 'AccountController@listAllAccouts')->name('user.allAccounts');
-Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('user.openedAccounts');;
-Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('user.closedAccounts');;
+Route::get('/accounts/{user}/opened', 'AccountController@openedAccounts')->name('user.openedAccounts');
+Route::get('/accounts/{user}/closed', 'AccountController@closedAccounts')->name('user.closedAccounts');
 
 // US15 -> close account
 Route::patch('/account/{account}/close', 'AccountController@close');
+Route::delete('/account/{account}', 'AccountController@delete');
 
 //US16 -> reopen account
 Route::patch('/account/{account}/reopen', 'AccountController@reopen');
@@ -64,9 +65,17 @@ Route::post('/account', 'AccountController@store')->name('user.storeAccount');
 
 // US18 -> edit accounts
 Route::get('/account/{account}', 'AccountController@edit');
+Route::put('/account/{account}', 'AccountController@updateAccount')->name('user.updateAccount');
 
-// US20 -> movements
-Route::get('/movements/{account}', 'MovementsController@listMovements');
+// US20 -> list movements
+Route::get('/movements/{account}', 'MovementController@listAllMovements');
+
+//US21 -> create, update and delete movements
+Route::get('/movements/{account}/create', 'MovementController@create');
+Route::post('/movements/{account}/create', 'MovementController@store')->name('user.storeMovement');
+Route::get('/movement/{movement}', 'MovementController@edit');
+Route::put('/movement/{movement}', 'MovementController@update')->name('user.updateMovement');
+Route::delete('/movement/{movement}', 'MovementController@delete');
 
 // US26 user dashboard page
 Route::get('/me/dashboard', 'DashboardController@index')->name('dashboard');

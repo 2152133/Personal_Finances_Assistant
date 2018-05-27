@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Account extends Model
@@ -18,7 +17,7 @@ class Account extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'owner_id', 'account_type_id', 'code', 'deleted_at'
+        'id', 'owner_id', 'account_type_id', 'date', 'code', 'description', 'start_balance', 'current_balance', 'last_movement_date'
 
     ];
 
