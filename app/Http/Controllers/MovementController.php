@@ -24,6 +24,7 @@ class MovementController extends Controller
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->where('accounts.id', '=', $account)
                     ->select('movements.*')
+                    ->orderBy('id', 'desc')
                     ->get();
     	
     	return view('movements.listAllMovements', compact('movements', 'account'));
@@ -38,7 +39,7 @@ class MovementController extends Controller
     public function store(Request $request, $account)
     {
         if ($request->has('cancel')) {
-            return redirect()->action('DashboardController@index');
+            return redirect()->action('DashboardController@index', Auth::user());
         }
 
         
@@ -49,14 +50,26 @@ class MovementController extends Controller
             'value' => 'nullable',
             'description' => 'nullable',
             ]);
+
+        $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $account)
+                    ->max('movements.id');
+
+        $lastMovement = Movement::findOrFail($lastMovementId);
+
         $movement['account_id'] = $account;
-        $movement['start_balance'] = 0;
-        $movement['end_balance'] = 0;
+        $movement['start_balance'] = $lastMovement->end_balance;
+        if ($request->type=='expense') {
+            $movement['end_balance'] = $lastMovement->end_balance - $request->value; 
+        }else{
+            $movement['end_balance'] = $lastMovement->end_balance + $request->value; 
+        }
+        
         
         
         Movement::create($movement);
         
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function edit (Movement $movement){
@@ -67,7 +80,7 @@ class MovementController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->has('cancel')) {
-            return redirect()->action('DashboardController@index');
+            return redirect()->action('DashboardController@index', Auth::user());
         }
 
         
@@ -83,7 +96,7 @@ class MovementController extends Controller
         $movementModel->fill($movement);
         $movementModel->save();
             
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function delete($id)
@@ -91,6 +104,6 @@ class MovementController extends Controller
         $movement = Movement::find($id);
         $movement->delete();
         
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 }

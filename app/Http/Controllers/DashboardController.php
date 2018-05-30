@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class DashboardController extends Controller
 {
@@ -23,11 +24,11 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(User $user)
     {
-    	$totalBalance = DB::table('accounts')->where('owner_id', Auth::user()->id)->sum('current_balance');
-    	$userAccounts = DB::table('accounts')->where('owner_id', Auth::user()->id)->get();
+    	$totalBalance = DB::table('accounts')->where('owner_id', $user)->sum('current_balance');
+    	$userAccounts = DB::table('accounts')->where('owner_id', $user)->get();
     	
-        return view('pages.dashboard', compact('totalBalance', 'userAccounts', 'accountPercentages'));
+        return view('pages.dashboard',['user' => Auth::user()], compact('totalBalance', 'userAccounts', 'accountPercentages'));
     }
 }

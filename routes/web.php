@@ -25,14 +25,14 @@ Auth::routes();
 Route::get('/users', 'UserController@index')->middleware('can:administrate')->name('users');
 
 //US7 -> operacoes no utilizador
-Route::patch('/users/{user}/block', 'UserController@block');
-Route::patch('/users/{user}/unblock', 'UserController@unblock');
-Route::patch('/users/{user}/promote', 'UserController@promote');
-Route::patch('/users/{user}/demote', 'UserController@demote');
+Route::patch('/users/{user}/block', 'UserController@block')->middleware('can:administrate');
+Route::patch('/users/{user}/unblock', 'UserController@unblock')->middleware('can:administrate');
+Route::patch('/users/{user}/promote', 'UserController@promote')->middleware('can:administrate');
+Route::patch('/users/{user}/demote', 'UserController@demote')->middleware('can:administrate');
 
 // US9 -> change user password
-Route::get('/me/password', 'UserController@editPassword')->name('user.editPassword');
-Route::patch('/me/password', 'UserController@updatePassword')->name('user.updatePassword');
+Route::get('/me/password', 'UserController@editPassword')->middleware('can:update')->name('user.editPassword');
+Route::patch('/me/password', 'UserController@updatePassword')->middleware('can:update')->name('user.updatePassword');
 
 // US10 -> update user profile
 Route::get('/me/profile', 'UserController@editProfile')->name('user.editProfile');
@@ -78,7 +78,7 @@ Route::put('/movement/{movement}', 'MovementController@update')->name('user.upda
 Route::delete('/movement/{movement}', 'MovementController@delete');
 
 // US26 user dashboard page
-Route::get('/me/dashboard', 'DashboardController@index')->name('dashboard');
+Route::get('dashboard/{user}', 'DashboardController@index')->name('dashboard');
 
 
 

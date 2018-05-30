@@ -28,6 +28,6 @@ class CheckHashPassword implements Rule
      */
     public function message()
     {
-        return 'The current password is Wrong.';
+        return 'The current password is wrong.';
     }
 }

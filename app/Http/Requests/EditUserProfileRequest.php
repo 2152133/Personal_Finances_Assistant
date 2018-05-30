@@ -26,7 +26,7 @@ class EditUserProfileRequest extends FormRequest
     {
         $user = Auth::user();
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,'.$user->id,
             //'email' => 'required|string|email|max:255|unique:users',
             'phone' => 'nullable|numeric',

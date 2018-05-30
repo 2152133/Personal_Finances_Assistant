@@ -5,14 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                @if ($errors->any())
-                    @include('partials.errors')
-                @endif
                 <div class="card-header">
                     {{ __('Register') }}
                 </div>
                 <div class="card-body">
-                    <form enctype="multipart/form-data" action="{{ route('register') }}" method="POST">
+                    <form enctype="multipart/form-data" action="{{ route('register') }}" method="post">
                         @csrf
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="name">

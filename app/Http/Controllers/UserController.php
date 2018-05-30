@@ -19,12 +19,12 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){
+    public function index(Request $request){
 		$users = User::All();
 
-		$name = \Request::query('name');
-		$admin = \Request::query('admin');
-		$blocked = \Request::query('blocked');
+		$name = $request->input('name');
+		$admin = $request->input('admin');
+		$blocked = $request->input('blocked');
 
 		$users = User::where('name','like','%'.$name.'%')
 			->where('admin','like','%'.$admin.'%')
@@ -138,14 +138,13 @@ class UserController extends Controller
 	public function editPassword()
     {
         $user = Auth::user();
-        $user->can('update');
         return view('users.editPassword', compact('user'));
     }
 
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
         $user = Auth::user();
-        $user->can('update');
+
         $data = $request->validated();
 
         $user->password = Hash::make($request->get('password'));

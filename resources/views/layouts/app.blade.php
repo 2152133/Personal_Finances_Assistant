@@ -30,7 +30,7 @@
         <div id="app">
             <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ url('me/dashboard') }}">
+                    <a class="navbar-brand" href="{{ url('/') }}">
                         Finances Assistance
                     </a>
                     <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarSupportedContent" data-toggle="collapse" type="button">

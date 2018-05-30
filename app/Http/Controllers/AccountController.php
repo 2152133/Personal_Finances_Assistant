@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Account;
+use App\Movement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -55,7 +56,7 @@ class AccountController extends Controller
         $account = Account::find($id);
         $account->delete();
 
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function reopen($id)
@@ -64,7 +65,7 @@ class AccountController extends Controller
                 ->where('id', '=', $id)
                 ->restore();
 
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function openedAccounts ($account){
@@ -89,10 +90,8 @@ class AccountController extends Controller
     public function store (Request $request){
         
         if ($request->has('cancel')) {
-            return redirect()->action('DashboardController@index');
+            return redirect()->action('DashboardController@index', Auth::user());
         }
-
-        
         
         $account = $request->validate([
             'account_type_id' => 'required',
@@ -112,37 +111,119 @@ class AccountController extends Controller
             ]
         ]);
         
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function updateAccount (Request $request, $id){
         
         if ($request->has('cancel')) {
-            return redirect()->action('DashboardController@index');
+            return redirect()->action('DashboardController@index', Auth::user());
         }
 
-        
-        
+        if ($request->filled('start_balance')) {
+            $movements = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
+                        ->where('movements.account_id', '=', $id)
+                        ->select('movements.*')
+                        ->orderBy('movements.id', 'asc')
+                        ->get();
+
+        }
+
         $account = $request->validate([
             'account_type_id' => 'required',
             'code' => 'required',
             'start_balance' => 'required',
-            'description' => 'required',
+            'description' => 'nullable',
             ]);
-    
+
+
+        if (count($movements)>0) {
+            for ($i=0; $i < count($movements); $i++) { 
+                if ($i==0) {
+                    if ($movements[$i]->type == 'expense') {
+
+                        DB::table('accounts')
+                            ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                            ->where('accounts.id', '=', $id)
+                            ->where('movements.id', '=', $movements[$i]->id)
+                            ->update(['movements.start_balance' => $request->start_balance,
+                                    'movements.end_balance' => ($request->start_balance - $movements[$i]->value)]);
+
+                    }else{
+                         DB::table('accounts')
+                            ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                            ->where('accounts.id', '=', $id)
+                            ->where('movements.id', '=', $movements[$i]->id)
+                            ->update(['movements.start_balance' => $request->start_balance,
+                                    'movements.end_balance' => ($request->start_balance + $movements[$i]->value)]);
+
+                    }
+                    
+                }else{
+
+                     $end_balance_movement = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $id)
+                                ->where('movements.id', '=', $movements[($i-1)]->id)
+                                ->select('movements.end_balance')
+                                ->first();
+
+                     
+                        if ($movements[$i]->type == 'expense') {
+                            DB::table('accounts')
+                                ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $id)
+                                ->where('movements.id', '=', $movements[$i]->id)
+                                ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                        'movements.end_balance' => ($end_balance_movement->end_balance - $movements[$i]->value) ]);
+                            
+
+                        }else{
+                            DB::table('accounts')
+                                ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $id)
+                                ->where('movements.id', '=', $movements[$i]->id)
+                                ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                        'movements.end_balance' => ($end_balance_movement->end_balance + $movements[$i]->value)]);
+                        }
+                }
+
+                if ($i == (count($movements))-1) {
+                    $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $id)
+                    ->max('movements.id');
+
+                    $lastMovement = Movement::findOrFail($lastMovementId);
+                   $current_balance=$lastMovement->end_balance;
+                }
+                
+            }
+            DB::table('accounts')
+                ->where('accounts.id', '=', $id)
+                ->update(['accounts.current_balance' => $current_balance]);
+        }
 
         $accountModel = Account::findOrFail($id);
         $accountModel->fill($account);
         $accountModel->save();
             
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function delete($id)
     {
         $account = Account::find($id);
-        $account->forceDelete();
+
+        $movements = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
+                    ->where('accounts.id', '=', $id)
+                    ->get();
+
+        if (count($movements) == 0) {
+            $account->forceDelete();
+        }else{
+             return redirect()->action('DashboardController@index', Auth::user())->with(['msgglobal' => 'Impossível bloquear o utilizador atual! ']);
+        }
         
-        return redirect()->action('DashboardController@index');
+        
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 }
