@@ -94,11 +94,11 @@ class AccountController extends Controller
         }
         
         $account = $request->validate([
-            'account_type_id' => 'required',
-            'date' => 'required',
-            'code' => 'required',
-            'start_balance' => 'required',
-            'description' => 'required',
+            'account_type_id' => 'required|integer|min:1|max:5',
+            'date' => 'nullable|date',
+            'code' => 'required|unique:acounts',
+            'start_balance' => 'required|integer',
+            'description' => 'nullable|string',
             ]);
         
         DB::table('accounts')->insert([
@@ -129,9 +129,12 @@ class AccountController extends Controller
 
         }
 
+        $accountCode = Account::findOrFail($id);
+
         $account = $request->validate([
-            'account_type_id' => 'required',
-            'code' => 'required',
+            'account_type_id' => 'required|max:5|integer',
+            'code' => 'required|unique:accounts,code,'.$id,
+            'date' => 'required|date',
             'start_balance' => 'required',
             'description' => 'nullable',
             ]);
@@ -220,7 +223,7 @@ class AccountController extends Controller
         if (count($movements) == 0) {
             $account->forceDelete();
         }else{
-             return redirect()->action('DashboardController@index', Auth::user())->with(['msgglobal' => 'Impossível bloquear o utilizador atual! ']);
+             return redirect()->action('DashboardController@index', Auth::user());
         }
         
         

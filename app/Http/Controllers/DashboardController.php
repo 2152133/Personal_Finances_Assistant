@@ -26,8 +26,8 @@ class DashboardController extends Controller
      */
     public function index(User $user)
     {
-    	$totalBalance = DB::table('accounts')->where('owner_id', $user)->sum('current_balance');
-    	$userAccounts = DB::table('accounts')->where('owner_id', $user)->get();
+    	$totalBalance = DB::table('accounts')->where('owner_id', $user->id)->sum('current_balance');
+    	$userAccounts = DB::table('accounts')->where('owner_id', $user->id)->get();
     	
         return view('pages.dashboard',['user' => Auth::user()], compact('totalBalance', 'userAccounts', 'accountPercentages'));
     }

@@ -13,11 +13,11 @@
                         @csrf
                         @method('put')
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="type">
+                            <label class="col-md-4 col-form-label text-md-right" for="account_type_id">
                                 {{ __('Account Type') }}
                             </label>
                             <div class="col-md-6">
-                                <select class="form-control" id="inputType" name="account_type_id">
+                                <select class="form-control" id="inputType" name="account_type_id"  required="">
                                     <option disabled="" selected="">
                                         -- select an option --
                                     </option>
@@ -27,6 +27,13 @@
                                     <option value="4" {{ old('account_type_id', strval($account->account_type_id)) === '4' ? "selected" : "" }}>Credit card</option>
                                     <option value="5" {{ old('account_type_id', strval($account->account_type_id)) === '5' ? "selected" : "" }}>Meal card</option>
                                 </select>
+                                 @if ($errors->has('account_type_id'))
+                                    <span class="invalid-feedback">
+                                        <strong>
+                                            {{ $errors->first('account_type_id') }}
+                                        </strong>
+                                    </span>
+                                    @endif
                             </div>
                         </div>
                         <div class="form-group row">
@@ -39,6 +46,22 @@
                                     <span class="invalid-feedback">
                                         <strong>
                                             {{ $errors->first('code') }}
+                                        </strong>
+                                    </span>
+                                    @endif
+                                </input>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-form-label text-md-right" for="date">
+                                {{ __('Date') }}
+                            </label>
+                            <div class="col-md-6">
+                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="date" name="date" type="text" value="{{ old('date', $account->date) }}">
+                                    @if ($errors->has('date'))
+                                    <span class="invalid-feedback">
+                                        <strong>
+                                            {{ $errors->first('date') }}
                                         </strong>
                                     </span>
                                     @endif

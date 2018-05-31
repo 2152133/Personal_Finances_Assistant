@@ -61,7 +61,7 @@ Route::patch('/account/{account}/reopen', 'AccountController@reopen');
 
 // US17 -> create account
 Route::get('/account', 'AccountController@create')->middleware('can:create')->name('user.createAccount');
-Route::post('/account', 'AccountController@store')->name('user.storeAccount');
+Route::post('/account', 'AccountController@store')->middleware('can:create')->name('user.storeAccount');
 
 // US18 -> edit accounts
 Route::get('/account/{account}', 'AccountController@edit');
