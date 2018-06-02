@@ -33,9 +33,9 @@ class User extends Authenticatable
     {
         switch ($this->admin) {
             case 0:
-                return 'User';
+                return 'User-is-Normal';
             case 1:
-                return 'Admin';
+                return 'User-is-Admin';
         }
 
         return 'Unknown';
@@ -45,9 +45,9 @@ class User extends Authenticatable
     {
         switch ($this->blocked) {
             case 0:
-                return 'Unblock';
+                return 'User-is-Unblocked';
             case 1:
-                return 'Block';
+                return 'User-is-Blocked';
         }
 
         return 'Unknown';

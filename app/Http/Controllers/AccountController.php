@@ -96,7 +96,7 @@ class AccountController extends Controller
         $account = $request->validate([
             'account_type_id' => 'required|integer|min:1|max:5',
             'date' => 'nullable|date',
-            'code' => 'required|unique:acounts',
+            'code' => 'required|unique:accounts',
             'start_balance' => 'required|integer',
             'description' => 'nullable|string',
             ]);

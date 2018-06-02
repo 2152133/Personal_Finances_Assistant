@@ -5,9 +5,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                @if ($errors->any())
-                    @include('partials.errors')
-                @endif
                 <div class="card-header">
                     {{ __('Change Password') }}
                 </div>

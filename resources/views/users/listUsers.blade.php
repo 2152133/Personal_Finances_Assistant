@@ -25,17 +25,17 @@
                     <tbody>
                         <tr>
                             <td>
-                               <input class="form-control" name="name" type="text"/> 
+                               <input class="form-control" name="name" id="name" type="text"/> 
                             </td>
                             <td>
-                                <select name="admin" id="inputType" class="form-control">
+                                <select name="admin" id="admin" class="form-control">
                                     <option></option>
                                     <option value="0">User</option>
                                     <option value="1">Admin</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="blocked" id="inputType" class="form-control">
+                                <select name="blocked" id="blocked" class="form-control">
                                     <option></option>
                                     <option value="0">Unblocked</option>
                                     <option value="1">Blocked</option>

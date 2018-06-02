@@ -49,7 +49,7 @@ class MovementController extends Controller
             'type' => 'required',
             'movement_category_id' => 'required',
             'date' => 'required',
-            'value' => 'nullable',
+            'value' => 'required',
             'description' => 'nullable',
             ]);
 
@@ -190,13 +190,13 @@ class MovementController extends Controller
 
                 
         $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
-        ->where('accounts.id', '=', $movement->account_id)
+        ->where('accounts.id', '=', $movementModel->account_id)
         ->max('movements.id');
 
         $lastMovement = Movement::findOrFail($lastMovementId);
 
         DB::table('accounts')
-                ->where('accounts.id', '=', $movement->account_id)
+                ->where('accounts.id', '=', $movementModel->account_id)
                 ->update(['accounts.current_balance' => $lastMovement->end_balance]);
         
 
@@ -235,19 +235,14 @@ class MovementController extends Controller
 
         if (count($movements) > 1) {
             for ($i=1; $i < count($movements); $i++) {
-            $start_balance_movement = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
-                            ->where('accounts.id', '=', $movement->account_id)
-                            ->where('movements.id', '=', $movements[($i-1)]->id)
-                            ->select('movements.start_balance')
-                            ->first();
-
-                if ($movements[$i]->type == 'expense') {
+                if ($i==1) {
+                    if ($movements[$i]->type == 'expense') {
                         DB::table('accounts')
                             ->join('movements', 'movements.account_id', '=', 'accounts.id')
                             ->where('accounts.id', '=', $movement->account_id)
                             ->where('movements.id', '=', $movements[$i]->id)
-                            ->update(['movements.start_balance' => $start_balance_movement->start_balance,
-                                    'movements.end_balance' => ($start_balance_movement->start_balance - $movements[$i]->value) ]);
+                            ->update(['movements.start_balance' => $movement->start_balance,
+                                    'movements.end_balance' => ($movement->start_balance - $movements[$i]->value) ]);
                         
 
                     }else{
@@ -255,9 +250,34 @@ class MovementController extends Controller
                             ->join('movements', 'movements.account_id', '=', 'accounts.id')
                             ->where('accounts.id', '=', $movement->account_id)
                             ->where('movements.id', '=', $movements[$i]->id)
-                            ->update(['movements.start_balance' => $start_balance_movement->start_balance,
-                                    'movements.end_balance' => ($start_balance_movement->start_balance + $movements[$i]->value)]);
+                            ->update(['movements.start_balance' => $movement->start_balance,
+                                    'movements.end_balance' => ($movement->start_balance + $movements[$i]->value)]);
                     }
+                }else{
+                $end_balance_movement = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
+                            ->where('accounts.id', '=', $movement->account_id)
+                            ->where('movements.id', '=', $movements[($i-1)]->id)
+                            ->select('movements.end_balance')
+                            ->first();
+
+                if ($movements[$i]->type == 'expense') {
+                        DB::table('accounts')
+                            ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                            ->where('accounts.id', '=', $movement->account_id)
+                            ->where('movements.id', '=', $movements[$i]->id)
+                            ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                    'movements.end_balance' => ($end_balance_movement->end_balance - $movements[$i]->value) ]);
+                        
+
+                    }else{
+                        DB::table('accounts')
+                            ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                            ->where('accounts.id', '=', $movement->account_id)
+                            ->where('movements.id', '=', $movements[$i]->id)
+                            ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                    'movements.end_balance' => ($end_balance_movement->end_balance + $movements[$i]->value)]);
+                    }
+                }
             }
         }
 

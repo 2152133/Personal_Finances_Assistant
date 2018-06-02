@@ -26,11 +26,15 @@ class UserController extends Controller
 		$admin = $request->input('admin');
 		$blocked = $request->input('blocked');
 
-		$users = User::where('name','like','%'.$name.'%')
-			->where('admin','like','%'.$admin.'%')
-			->where('blocked','like','%'.$blocked.'%')
-	        ->orderBy('name')
-	        ->paginate(15);
+        
+            $users = User::where('name','like','%'.$name.'%')
+            ->where('admin','like','%'.$admin.'%')
+            ->where('blocked','like','%'.$blocked.'%')
+            ->orderBy('name')
+            ->paginate(15);
+        
+
+		
 
 		return view('users.listUsers', compact('users'));
 		//dd($this);

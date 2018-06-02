@@ -28,9 +28,8 @@ class EditUserProfileRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            //'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'nullable|numeric',
-            'profile_photo' => 'mimes:jpeg,jpg,png|nullable|max:1999',
+            'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
+            'profile_photo' => 'mimes:jpeg,jpg,png|nullable|max:1999|file',
         ];
     }
 }
