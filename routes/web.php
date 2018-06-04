@@ -81,6 +81,9 @@ Route::delete('/movement/{movement}', 'MovementController@delete');
 Route::get('/dashboard/{user}', 'DashboardController@index')->name('dashboard');
 
 
+// US27 statistics
+Route::get('/statistics', 'StatisticsController@index');
+
 
 
 
