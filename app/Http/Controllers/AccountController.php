@@ -106,7 +106,8 @@ class AccountController extends Controller
              'account_type_id' => $request->account_type_id,
              'date' => $request->date, 
              'code' => $request->code,
-             'start_balance' => $request->start_balance, 
+             'start_balance' => $request->start_balance,
+             'current_balance' => $request->start_balance,
              'description' => $request->description,
             ]
         ]);
@@ -203,6 +204,10 @@ class AccountController extends Controller
             DB::table('accounts')
                 ->where('accounts.id', '=', $id)
                 ->update(['accounts.current_balance' => $current_balance]);
+        }else{
+            DB::table('accounts')
+                ->where('accounts.id', '=', $id)
+                ->update(['accounts.current_balance' => $request->start_balance]);
         }
 
         $accountModel = Account::findOrFail($id);
