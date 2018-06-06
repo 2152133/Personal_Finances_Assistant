@@ -78,9 +78,15 @@ Route::put('/movement/{movement}', 'MovementController@update')->name('user.upda
 Route::delete('/movement/{movement}', 'MovementController@delete');
 
 // US26 user dashboard page
-Route::get('dashboard/{user}', 'DashboardController@index')->name('dashboard');
+Route::get('/dashboard/{user}', 'DashboardController@index')->name('dashboard');
 
 
+// US27 statistics
+Route::get('/statistics', 'StatisticsController@index');
+
+
+Route::post('/users/{user}/associate', 'UserController@addToMyGroup');
+Route::delete('/users/{user}/dessociate', 'UserController@removeFromMyGroup');
 
 
 

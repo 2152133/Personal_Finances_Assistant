@@ -85,4 +85,15 @@ class User extends Authenticatable
         return $this->belongsToMany('App\User', 'associate_members', 'associated_user_id', 'main_user_id');
     }
 
+
+    public function buttonGroupStatus(){
+        switch ($this->associatedMembers()) {
+            case 0:
+                return 'Block';
+            case 1:
+                return 'Unblock';
+        }
+
+        return 'Unknown';
+    }
 }
