@@ -85,6 +85,8 @@ Route::get('/dashboard/{user}', 'DashboardController@index')->name('dashboard');
 Route::get('/statistics', 'StatisticsController@index');
 
 
+Route::post('/users/{user}/associate', 'UserController@addToMyGroup');
+Route::delete('/users/{user}/dessociate', 'UserController@removeFromMyGroup');
 
 
 

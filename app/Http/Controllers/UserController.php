@@ -92,6 +92,30 @@ class UserController extends Controller
 		}
 	}
 
+    public function addToMyGroup(User $user)
+    {
+        if ($user == Auth::user()) {
+            return redirect()->action('UserController@listProfiles')->with(['msgglobal' => 'Impossível adicionar o utilizador atual à sua lista de associados! ']);
+        }else{
+            Auth::user()->associatedMembers()->attach($user->id);
+            
+            $user->save();
+
+            return redirect()->action('UserController@listProfiles');
+        }
+    }
+
+    public function removeFromMyGroup(User $user)
+    {
+        if ($user == Auth::user()) {
+            return redirect()->action('UserController@listProfiles')->with(['msgglobal' => 'Impossível remover o utilizador atual à sua lista de associados! ']);
+        }else{
+            Auth::user()->associatedMembers()->detach($user->id);
+            
+            return redirect()->action('UserController@listProfiles');
+        }
+    }
+
 
    public function pesquisar()
    {
@@ -111,9 +135,22 @@ class UserController extends Controller
 
         $users = User::where('name','like','%'.$name.'%')
             ->orderBy('name')
-            ->paginate(15);
+            ->paginate(5);
 
-        return view('users.listProfiles', compact('users'));
+        $me = Auth::user();
+
+        $associatedMembersIds = [];
+        $associatedToIds = [];
+
+        foreach ($me->associatedMembers as $user) {
+            array_push($associatedMembersIds, $user->id);
+        }
+
+        foreach ($me->associatedTo as $user) {
+            array_push($associatedToIds, $user->id);
+        }
+
+        return view('users.listProfiles', compact('users', 'associatedMembersIds', 'associatedToIds', 'me'));
     }
 
     public function editProfile(User $user)
