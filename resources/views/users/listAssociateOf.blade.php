@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 @if (count($users))
 <div class="container">
     <h3>
@@ -35,7 +36,7 @@
                     {{ $user->email }}
                 </td>
                 <td>
-                    <a href="{{ url('/accounts/'.$user->name) }}">
+                    <a href="{{ url('/accounts/'.$user->id) }}">
                         List of accounts
                     </a>
                 </td>
@@ -51,4 +52,5 @@
     </h2>
 </div>
 @endif
+
 @endsection
