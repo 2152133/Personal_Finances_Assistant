@@ -17,7 +17,7 @@
                                 {{ __('Current Password') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="old_password" name="old_password" required="" type="password">
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="old_password" name="old_password" type="password" required>
                                     @if ($errors->has('old_password'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -25,7 +25,6 @@
                                         </strong>
                                     </span>
                                     @endif
-                                </input>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -33,24 +32,29 @@
                                 {{ __('New Password') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" required="" type="password">
-                                    @if ($errors->has('password'))
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" required="" type="password" required>
+                                @if ($errors->has('password'))
                                     <span class="invalid-feedback">
                                         <strong>
                                             {{ $errors->first('password') }}
                                         </strong>
                                     </span>
-                                    @endif
-                                </input>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-4 col-form-label text-md-right" for="password-confirm">
+                            <label class="col-md-4 col-form-label text-md-right" for="password_confirmation">
                                 {{ __('Confirm New Password') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control" id="password-confirm" name="password_confirmation" required="" type="password">
-                                </input>
+                                <input class="form-control{{ $errors->has('password_confirmation') ? ' is-invalid' : '' }}" id="password_confirmation" name="password_confirmation" type="password" required>
+                                @if ($errors->has('password_confirmation'))
+                                    <span class="invalid-feedback">
+                                        <strong>
+                                            {{ $errors->first('password_confirmation') }}
+                                        </strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                         <div class="form-group row mb-0">

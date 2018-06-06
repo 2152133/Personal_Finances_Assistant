@@ -31,8 +31,8 @@ Route::patch('/users/{user}/promote', 'UserController@promote')->middleware('can
 Route::patch('/users/{user}/demote', 'UserController@demote')->middleware('can:administrate');
 
 // US9 -> change user password
-Route::get('/me/password', 'UserController@editPassword')->middleware('can:update')->name('user.editPassword');
-Route::patch('/me/password', 'UserController@updatePassword')->middleware('can:update')->name('user.updatePassword');
+Route::get('/me/password', 'UserController@editPassword')->name('user.editPassword');
+Route::patch('/me/password', 'UserController@updatePassword')->name('user.updatePassword');
 
 // US10 -> update user profile
 Route::get('/me/profile', 'UserController@editProfile')->name('user.editProfile');

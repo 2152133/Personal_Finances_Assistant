@@ -96,15 +96,15 @@
                     {{ $user->status() }}
                 </td>
                 <td>
-                    @if ($user->blocked === 0)
-                        <form action="{{ action('UserController@block', $user->id ) }}" class="inline" method="post">
+                    @if ($user->blocked == 0)
+                        <form action="{{ action('UserController@block', $user ) }}" class="inline" title="Block" method="post">
                             @csrf
                         @method('patch')
                             <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
                             </input>
                         </form>
                     @else
-                        <form action="{{ action('UserController@unblock', $user->id ) }}" class="inline" method="post">
+                        <form action="{{ action('UserController@unblock', $user ) }}" class="inline" method="post" title="Unblock">
                             @csrf
                         @method('patch')
                             <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ $user->buttonStatus() }} ">
@@ -113,15 +113,15 @@
                     @endif
                 </td>
                 <td>    
-                    @if ($user->admin === 0)
-                        <form action="{{ action('UserController@promote', $user->id ) }}" class="inline" method="post">
+                    @if ($user->admin == 0)
+                        <form action="{{ action('UserController@promote', $user ) }}" class="inline" method="post">
                             @csrf
                         @method('patch')
                             <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">
                             </input>
                         </form>
                     @else
-                        <form action="{{ action('UserController@demote', $user->id ) }}" class="inline" method="post">
+                        <form action="{{ action('UserController@demote', $user ) }}" class="inline" method="post">
                             @csrf
                         @method('patch')
                             <input class="btn btn-xs btn-primary custom" type="submit" value="{{ $user->buttonType() }} ">

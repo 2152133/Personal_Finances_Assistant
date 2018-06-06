@@ -33,6 +33,10 @@ class AuthServiceProvider extends ServiceProvider
              return ($user->admin == 0 || $user->admin == 1);
         });
 
+        Gate::define('delete', function ($user) {
+             return ($user->admin == 0 || $user->admin == 1);
+        });
+
         Gate::define('view-account-movements', function ($user, $account_id) {
             //dd($this->accountOwnerId($account_id));
             return $user->id == $this->accountOwnerId($account_id);

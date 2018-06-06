@@ -33,7 +33,7 @@
                                 {{ __('E-Mail Address') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email', $user->email) }}">
+                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required>
                                     @if ($errors->has('email'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -49,7 +49,7 @@
                                 {{ __('Phone Number') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}">
+                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}" optional>
                                     @if ($errors->has('phone'))
                                     <span class="invalid-feedback">
                                         <strong>

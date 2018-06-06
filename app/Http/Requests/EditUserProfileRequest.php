@@ -27,9 +27,12 @@ class EditUserProfileRequest extends FormRequest
         $user = Auth::user();
         return [
             'name' => 'required|string|max:255|regex:/^[\pL\s]+$/u',
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'email' => 'required|email|max:255|unique:users,email,'.$user->id,
             'phone' => 'nullable|regex:/^(\+?)([0-9] ?){9,20}$/',
             'profile_photo' => 'mimes:jpeg,jpg,png|nullable|max:1999|file',
+            [
+                'phone.regex' => 'Invalid Format',
+            ]
         ];
     }
 }

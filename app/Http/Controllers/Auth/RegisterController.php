@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -65,29 +66,23 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if(count($data) == 7){
-            // Get filename with the extension
-            $filenameWithExt = $data['profile_photo']->getClientOriginalName();
-            // Get filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get file extension
-            $extension = $data['profile_photo']->getClientOriginalExtension();
-            // Filename to store
-            $fileNameToStore= $filename.'_'.time().'.'.$extension;
-            // Upload Image
-            $path = $data['profile_photo']->storeAs('public/profiles', $fileNameToStore);
+        $name = request()->file('profile_photo');
 
-
-        } else {
-            $fileNameToStore = null;
+        if ($name != null) {
+            if ($name->isValid()) {
+                $name = $name->hashname();
+                Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $name);
+            }
         }
-         
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'phone' => $data['phone'],
-            'profile_photo' => $data['profile_photo'] = $fileNameToStore,
-        ]);//projeto/storage/app/public
+            'profile_photo' => $name,
+        ]);
+
+
     }
 }

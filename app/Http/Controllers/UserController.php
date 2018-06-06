@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditUserProfileRequest;
 use App\Http\Requests\ChangeUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -42,54 +44,82 @@ class UserController extends Controller
 
     public function block(User $user){
 
-    	if ($user == Auth::user()) {
-    		return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível bloquear o utilizador atual! ']);
-    	}else{
-    		DB::table('users')
-			->where('id', $user->id)
-			->update(['blocked' => 1]);
-		
-			return redirect()->action('UserController@index');
+    	if ($user->id == Auth::user()->id) {
+    		return response ('Unauthorized action!', 403);//redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível bloquear o utilizador atual! ']);
     	}
+
+        if (Gate::allows('administrate', Auth::user())) {
+                DB::table('users')
+                    ->where('id', $user->id)
+                    ->update(['blocked' => 1]);
+        return redirect()->action('UserController@index');
+        }
+        	
+		
+		
+
+        return response ('Unauthorized action!', 403);
+    	
 		
 	}
 
 	public function unblock(User $user){
-		if ($user == Auth::user()) {
-    		return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível desbloquear o utilizador atual! ']);
-    	}else{
-			DB::table('users')
-				->where('id', $user->id)
-				->update(['blocked' => 0]);
+		if ($user->id == Auth::user()->id) {
+            return response ('Unauthorized action!', 403);
+    		//return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível desbloquear o utilizador atual! ']);
+    	}
+            
+        if (Gate::allows('administrate', Auth::user())) {
+                DB::table('users')
+                    ->where('id', $user->id)
+                    ->update(['blocked' => 0]);
+
+        return redirect()->action('UserController@index');
+        }
 			
-			return redirect()->action('UserController@index');
-		}
+			
+		
+
+        return response ('Unauthorized action!', 403);
+		
 	}
 
 	public function promote(User $user)
 	{
-		if ($user == Auth::user()) {
-    		return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível promover o utilizador atual! ']);
-    	}else{
-			DB::table('users')
-				->where('id', $user->id)
-				->update(['admin' => 1]);
+		if ($user->id == Auth::user()->id) {
+    		return response ('Unauthorized action!', 403);
+    	}
+
+        if (Gate::allows('administrate')) {
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['admin' => 1]);
+
+        return redirect()->action('UserController@index');
+        }
 			
-			return redirect()->action('UserController@index');
-		}
+	   
+       return response ('Unauthorized action!', 403);
+			
+		
 	}
 
 	public function demote(User $user)
 	{
-		if ($user == Auth::user()) {
-    		return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível despromover o utilizador atual! ']);
-    	}else{
-			DB::table('users')
-				->where('id', $user->id)
-				->update(['admin' => 0]);
+		if ($user->id == Auth::user()->id) {
+    		return response ('Unauthorized action!', 403);
+    	}
+
+        if (Gate::allows('administrate')) {
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['admin' => 0]);
+        return redirect()->action('UserController@index');
+        }
 			
-			return redirect()->action('UserController@index');
-		}
+			
+		return response ('Unauthorized action!', 403);
+		
 	}
 
 
@@ -125,17 +155,29 @@ class UserController extends Controller
 
     public function updateProfile(EditUserProfileRequest $request)
     {
-        $user = Auth::user();
-        $user->can('update');
-        $data = $request->validated();
-
+        $name = $request->profile_photo;
         
+        if ($name != null) {
+            if ($name->isValid()) {
+                $name = $name->hashname();
+                Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $name);
+            }
+        }
 
-        $user->fill($data);
-        $user->save();
+        $user = $request->validated();
+        
+        $userModel = User::findOrFail(Auth::user()->id);
+        $userModel->fill($user);
+
+        if ($name != null) {
+            $userModel->profile_photo = $name;
+        }
+
+        $userModel->phone = $request->input('phone');
+        $userModel->save();
 
         return redirect()
-            ->route('dashboard')
+            ->route('dashboard', Auth::user())
             ->with('success', 'Profile edited successfully.');
     }
 
@@ -147,16 +189,15 @@ class UserController extends Controller
 
     public function updatePassword(ChangeUserPasswordRequest $request)
     {
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::user()->id);
 
         $data = $request->validated();
 
-        $user->password = Hash::make($request->get('password'));
+        $data['password'] = Hash::make($request->password);
+        $user->fill($data);
         $user->save();
 
-        return redirect()
-            ->route('dashboard')
-            ->with('success', 'Password changed successfully.');
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
     public function listAssociateOf()
