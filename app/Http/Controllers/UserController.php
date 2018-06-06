@@ -101,7 +101,7 @@ class UserController extends Controller
             
             $user->save();
 
-            return redirect()->action('UserController@listProfiles');
+            return redirect()->back();
         }
     }
 
@@ -112,7 +112,7 @@ class UserController extends Controller
         }else{
             Auth::user()->associatedMembers()->detach($user->id);
             
-            return redirect()->action('UserController@listProfiles');
+            return redirect()->back();
         }
     }
 
@@ -205,6 +205,8 @@ class UserController extends Controller
     public function listAssociates()
     {
         $users = User::all();
-        return view('users.listAssociates', compact('users'));
+        $me = Auth::user();
+        return view('users.listAssociates', compact('users', 'me'));
     }
+
 }

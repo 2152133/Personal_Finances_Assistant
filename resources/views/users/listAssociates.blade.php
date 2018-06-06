@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (App\User::find(Auth::user()->id)->associatedMembers as $user)
+            @foreach ($me->associatedMembers as $user)
             <tr>
                 <td>
                     {{ $user->name }}
@@ -31,6 +31,15 @@
                 <td>
                     {{ $user->email }}
                 </td>
+                <td>
+                    <form action="{{ action('UserController@removeFromMyGroup', $user->id ) }}" class="inline" method="post">
+                    @csrf
+                    @method('delete')
+                    <input class="btn btn-xs btn-danger custom1" type="submit" value="{{ __('remover') }} ">
+                    </input>
+                    </form>
+                </td>
+                
             </tr>
             @endforeach
         </tbody>
