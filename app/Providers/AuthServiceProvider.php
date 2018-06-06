@@ -41,6 +41,20 @@ class AuthServiceProvider extends ServiceProvider
             //dd($this->accountOwnerId($account_id));
             return $user->id == $this->accountOwnerId($account_id);
         });
+
+        Gate::define('view-user-accounts', function ($user, $userIWantToSee_id) {
+            $associatedToIds = [];
+
+            foreach ($user->associatedTo as $userImaAssociatedTo) {
+                array_push($associatedToIds, $userImaAssociatedTo->id);
+            }
+            
+            return (in_array($userIWantToSee_id, $associatedToIds) || ($user->id == $userIWantToSee_id));
+        });
+
+        Gate::define('edit-delete-user-accounts', function ($user, $userIWantToSee_id) {
+            return ($user->id == $userIWantToSee_id);
+        });
     }
 
     public function accountOwnerId($account_id){

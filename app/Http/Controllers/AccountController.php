@@ -29,15 +29,15 @@ class AccountController extends Controller
     }
 
 
-    public function listAllAccouts()
+    public function listAllAccouts($user_id)
     {
         $accounts = Account::withTrashed()
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
-            ->where('owner_id', '=', Auth::user()->id)
+            ->where('owner_id', '=', $user_id)
             ->select('accounts.*','account_types.name')
             ->get();
         
-        return view('accounts.listAllAccounts', compact('accounts'));
+        return view('accounts.listAllAccounts', compact('accounts', 'user_id'));
     }
 
     public function edit (Account $account){
