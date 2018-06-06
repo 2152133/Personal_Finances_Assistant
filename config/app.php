@@ -149,7 +149,7 @@ return [
 
 
 
-        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         
 
         /*
