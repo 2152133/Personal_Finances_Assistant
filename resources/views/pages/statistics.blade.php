@@ -32,16 +32,22 @@
 
     <br>
 
-    <div class="row">
-        <div class="col-md-5">
-            <div class="card">
-                <h1 class="card-header">Statistics</h1>
+    <div >
 
-                <p>Total de Receitas: </p>
-                <p>Total de Despesas: </p>
+            <div class="card">
+                <h1 class="card-header text-center">Statistics</h1>
+
+                <p class="text-center">Total de Receitas: {{ $totalReceitas }}</p>
+                <p class="text-center">Total de Despesas: {{ $totalDespesas }}</p>
+
+                <div name='chart-div' id='chart-div'>
+                    @piechart('Totais', 'chart-div')
+                </div>
+
             </div>
-        </div>
+
     </div>
+    
     
     
     
