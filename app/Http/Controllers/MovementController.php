@@ -22,7 +22,6 @@ class MovementController extends Controller
     }
 
     public function listAllMovements($account){
-
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
                     ->where('accounts.id', '=', $account)
