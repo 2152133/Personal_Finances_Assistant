@@ -37,8 +37,11 @@ class AuthServiceProvider extends ServiceProvider
              return ($user->admin == 0 || $user->admin == 1);
         });
 
+        Gate::define('view-dashboard', function ($user, $userDashboard) {
+            return $user->id == $userDashboard->id;
+        });
+
         Gate::define('view-account-movements', function ($user, $account_id) {
-            //dd($this->accountOwnerId($account_id));
             return $user->id == $this->accountOwnerId($account_id);
         });
 

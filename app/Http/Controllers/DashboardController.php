@@ -34,6 +34,6 @@ class DashboardController extends Controller
                             ->get();
         
     	
-        return view('pages.dashboard',['user' => Auth::user()], compact('totalBalance', 'userAccounts', 'accountPercentages'));
+        return view('pages.dashboard',[Auth::user()], compact('totalBalance', 'userAccounts', 'accountPercentages', 'user'));
     }
 }
