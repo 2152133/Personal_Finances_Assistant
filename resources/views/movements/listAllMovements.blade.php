@@ -11,7 +11,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Category ID</th>
+                    <th>Category</th>
                     <th>Date</th>
                     <th>Value</th>
                     <th>Start Balance</th>
@@ -25,7 +25,7 @@
             @foreach ($movements as $movement)
                 <tr>
                     <td>{{$movement->id}}</td>
-                    <td>{{$movement->movement_category_id}}</td>
+                    <td>{{$movement->name}}</td>
                     <td>{{$movement->date}}</td>
                     <td>{{$movement->value}}</td>
                     <td>{{$movement->start_balance}}</td>
