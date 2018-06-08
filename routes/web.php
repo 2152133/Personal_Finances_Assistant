@@ -68,7 +68,7 @@ Route::get('/account/{account}', 'AccountController@edit');
 Route::put('/account/{account}', 'AccountController@updateAccount')->name('user.updateAccount');
 
 // US20 -> list movements
-Route::get('/movements/{account}', 'MovementController@listAllMovements');
+Route::get('/movements/{account}', 'MovementController@listAllMovements')->middleware('can:view-account-movements,account');
 
 //US21 -> create, update and delete movements
 Route::get('/movements/{account}/create', 'MovementController@create');
