@@ -32,20 +32,30 @@
 
     <br>
 
-    <div >
+    <div class="card">
+        <h1 class="card-header text-center">Statistics</h1>
 
-            <div class="card">
-                <h1 class="card-header text-center">Statistics</h1>
+        <br>
+        <h2 class="text-center">Totais de despesas e receitas</h2>
+        <div id='globalPie'>
+            @piechart('TotaisGlobais', 'globalPie')
+        </div>
 
-                <p class="text-center">Total de Receitas: {{ $totalReceitas }}</p>
-                <p class="text-center">Total de Despesas: {{ $totalDespesas }}</p>
-
-                <div name='chart-div' id='chart-div'>
-                    @piechart('Totais', 'chart-div')
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-center">Receitas</h3>
+                <div id='revenueBar'>
+                    @barchart('TotaisReceitas', 'revenueBar')
                 </div>
-
             </div>
-
+            
+            <div class="col-md-6">
+                <h3 class="text-center">Despesas</h3>
+                <div id='expenseBar'>
+                    @barchart('TotaisDespesas', 'expenseBar')
+                </div>
+            </div>
+        </div>
     </div>
     
     

@@ -36,54 +36,95 @@ class StatisticsController extends Controller
             $from = $request->input('fromDate');
             $to = $request->input('toDate');
 
-            //dd($from->toDateString());
-            $totalReceitas = abs(DB::table('movements')
-                            ->join('accounts', 'movements.account_id', '=', 'accounts.id')
-                            ->where('accounts.owner_id', '=', $me->id)
-                            ->where('type', '=', 'revenue')
-                            ->select('movements.*', 'accounts.owner_id')
-                            ->whereBetween('movements.date', [$from, $to])
-                            ->sum('value'));
 
-            $totalDespesas = abs(DB::table('movements')
+            /* Totais gerais de receitas e despesas*/
+            $revenueCategoriesInfo = DB::table('movements')
                             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+                            ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
                             ->where('accounts.owner_id', '=', $me->id)
-                            ->where('type', '=', 'expense')
-                            ->select('movements.*', 'accounts.owner_id')
+                            ->where('movements.type', '=', 'revenue')
                             ->whereBetween('movements.date', [$from, $to])
-                            ->sum('value'));
+                            ->selectRaw('SUM(movements.value) as total, movement_categories.name')
+                            ->groupBy('movement_categories.name')->get();
+
+            
+            $expenseCategoriesInfo = DB::table('movements')
+                            ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+                            ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
+                            ->where('accounts.owner_id', '=', $me->id)
+                            ->where('movements.type', '=', 'expense')
+                            ->whereBetween('movements.date', [$from, $to])
+                            ->selectRaw('SUM(movements.value) as total, movement_categories.name')
+                            ->groupBy('movement_categories.name')->get();
+
         } else {
-            $totalReceitas = abs(DB::table('movements')
+            $revenueCategoriesInfo = DB::table('movements')
                             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+                            ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
                             ->where('accounts.owner_id', '=', $me->id)
-                            ->where('type', '=', 'revenue')
-                            ->select('movements.*', 'accounts.owner_id')
-                            ->sum('value'));
+                            ->where('movements.type', '=', 'revenue')
+                            ->selectRaw('SUM(movements.value) as total, movement_categories.name')
+                            ->groupBy('movement_categories.name')->get();
+        
 
-            $totalDespesas = abs(DB::table('movements')
+            $expenseCategoriesInfo = DB::table('movements')
                             ->join('accounts', 'movements.account_id', '=', 'accounts.id')
+                            ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
                             ->where('accounts.owner_id', '=', $me->id)
-                            ->where('type', '=', 'expense')
-                            ->select('movements.*', 'accounts.owner_id')
-                            ->sum('value'));
+                            ->where('movements.type', '=', 'expense')
+                            ->selectRaw('SUM(movements.value) as total, movement_categories.name')
+                            ->groupBy('movement_categories.name')->get();
         }
         
         
         
-        //Criar o grafico
-        $dataTable = \Lava::DataTable();
-        $dataTable->addStringColumn('nome')
-                    ->addNumberColumn('total');
+        /* Criar o grafico dos totais globais */
+        $tabelaTotaisGlobais = \Lava::DataTable();
+        $tabelaTotaisGlobais->addStringColumn('nome')
+                            ->addNumberColumn('total');
 
+        $globalTotalRevenue = 0;
+        $globalTotalExpense = 0;
+        foreach ($revenueCategoriesInfo as $revenueCategoryInfo) {
+            $globalTotalRevenue += $revenueCategoryInfo->total;
+        }
 
-        $dataTable->addRow(['totalReceitas', $totalReceitas])
-                    ->addRow(['totalDespesas',$totalDespesas]);   
+        foreach ($expenseCategoriesInfo as $expenseCategoryInfo) {
+            $globalTotalExpense += abs($expenseCategoryInfo->total);
+        }
 
-        \Lava::PieChart('Totais', $dataTable, [
-                                    'title'  => 'Totais de despesas e receitas',
-                                    'is3D'   => true
+        $tabelaTotaisGlobais->addRow(['Total de receitas', $globalTotalRevenue])
+                            ->addRow(['Total de despesas',$globalTotalExpense]);   
+
+        \Lava::PieChart('TotaisGlobais', $tabelaTotaisGlobais, [
+                                    'title'  => '',
+                                    'is3D'   => false
                                     ]);
 
-        return view('pages.statistics', compact('totalReceitas', 'totalDespesas'));
+        
+        /* Cria os graficos para as receitas de cada categoria */
+        $tabelaTotaisReceitas = \Lava::DataTable();
+        $tabelaTotaisReceitas->addStringColumn('nome')
+                                ->addNumberColumn('total');
+
+        foreach ($revenueCategoriesInfo as $revenueCategoryInfo) {
+            $tabelaTotaisReceitas->addRow([$revenueCategoryInfo->name, $revenueCategoryInfo->total]);
+        }
+        
+        \Lava::BarChart('TotaisReceitas', $tabelaTotaisReceitas);
+
+
+        /* Cria os graficos para as receitas de cada categoria */
+        $tabelaTotaisDespesas = \Lava::DataTable();
+        $tabelaTotaisDespesas->addStringColumn('nome')
+                                ->addNumberColumn('total');
+
+        foreach ($expenseCategoriesInfo as $expenseCategoryInfo) {
+            $tabelaTotaisDespesas->addRow([$expenseCategoryInfo->name, abs($expenseCategoryInfo->total)]);
+        }
+        
+        \Lava::BarChart('TotaisDespesas', $tabelaTotaisDespesas);
+
+        return view('pages.statistics');
     }
 }
