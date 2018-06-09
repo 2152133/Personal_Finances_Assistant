@@ -69,8 +69,8 @@ class RegisterController extends Controller
         $photo = request()->file('profile_photo');
 
         if ($photo != null) {
-            if ($name->isValid()) {
-                $photo = $name->hashname();
+            if ($photo->isValid()) {
+                $photo = $photo->hashname();
                 Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $photo);
             }
         }

@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditUserProfileRequest;
 use App\Http\Requests\ChangeUserPasswordRequest;
-use App\Http\Requests\CreateUserProfileRequest
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -217,7 +216,7 @@ class UserController extends Controller
         $user->save();
 
         return redirect()
-            ->action('dashboard', Auth::user())
+            ->action('DashboardController@index', Auth::user())
             ->with('success', 'Password changed successfully.');;
     }
 
