@@ -95,7 +95,7 @@ Route::get('/dashboard/{user}', 'DashboardController@index')->name('dashboard');
 
 
 // US27 statistics
-Route::get('/statistics', 'StatisticsController@index');
+Route::get('/statistics', 'StatisticsController@index')->name('statistics');
 
 
 Route::post('/users/{user}/associate', 'UserController@addToMyGroup');

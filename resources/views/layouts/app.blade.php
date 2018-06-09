@@ -109,6 +109,9 @@
                                     <a class="dropdown-item" href="{{ route('user.createAccount') }}">
                                         {{ __('Create Account') }}
                                     </a>
+                                    <a class="dropdown-item" href="{{ route('statistics') }}">
+                                        {{ __('Statistics') }}
+                                    </a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
