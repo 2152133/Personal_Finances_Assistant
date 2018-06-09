@@ -38,6 +38,7 @@ class MovementController extends Controller
 
     public function create($account)
     {
+        Account::findOrFail($account);
         $movement = new Movement;
         return view('movements.createMovement', compact('movement', 'account'));
     }
