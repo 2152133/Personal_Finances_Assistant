@@ -63,6 +63,8 @@ class UserStory26Test extends BaseAccountsTest
             return number_format($account->current_balance * 100 / $total, 2);
         });
 
+        dump($summary->toArray());
+        dump($percentage->toArray());
         $this->actingAs($this->mainUser)
             ->get('/dashboard/'.$this->mainUser->id)
             ->assertSee(number_format($total, 2))

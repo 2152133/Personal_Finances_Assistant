@@ -19,7 +19,7 @@
                     
                     <h1 class="card-header">Your total balance</h1>
                     
-                    <h2>{{$totalBalance}}€</h2>
+                    <h2>{{number_format($totalBalance,2)}} €</h2>
                 
                 </div>
             
@@ -29,6 +29,7 @@
                     <tr>
                         <th class="text-center">Account Id</th>
                         <th class="text-center">Account Type</th>
+                        <th class="text-center">Account Balance</th>
                         <th class="text-center">% from total Balance</th>
                     </tr>
                 </thead>
@@ -37,7 +38,7 @@
                         <tr>
                             <td>{{$account->id}}</td>
                             <td>{{$account->name}}</td> 
-                            
+                            <td>{{number_format($account->current_balance,2)}} €</td>
                             @if($totalBalance != 0)
                                 <td>{{round(($account->current_balance/$totalBalance*100), 2)}}%</td>
                             @else
