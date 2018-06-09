@@ -15,14 +15,14 @@
 
 // US1 -> main page
 Route::get('/', function () {	
-    return view('welcome');
+	return view('welcome');
 });
 
 // US2,3,4,8 -> register, login, forgot password, logout
 Auth::routes();
 
 // US5-6 -> list users profiles (admin)
-Route::get('/users', 'UserController@index')->middleware('can:administrate')->name('users');
+Route::get('/users', 'UserController@edit')->middleware('can:administrate')->name('users');
 
 //US7 -> operacoes no utilizador
 Route::patch('/users/{user}/block', 'UserController@block')->middleware('can:administrate');
@@ -67,8 +67,13 @@ Route::post('/account', 'AccountController@store')->middleware('can:create')->na
 Route::get('/account/{account}', 'AccountController@edit');
 Route::put('/account/{account}', 'AccountController@updateAccount')->name('user.updateAccount');
 
+
+Route::get('/view/{movement}', 'MovementController@viewFile');
+Route::get('/download/{movement}', 'MovementController@downloadFile');
+
+
 // US20 -> list movements
-Route::get('/movements/{account}', 'MovementController@listAllMovements');
+Route::get('/movements/{account}', 'MovementController@listAllMovements')->middleware('can:view-account-movements,account');
 
 //US21 -> create, update and delete movements
 Route::get('/movements/{account}/create', 'MovementController@create');
@@ -99,7 +104,6 @@ Route::get('/statistics', 'StatisticsController@index');
 
 Route::post('/users/{user}/associate', 'UserController@addToMyGroup');
 Route::delete('/users/{user}/dessociate', 'UserController@removeFromMyGroup');
-
 
 
 

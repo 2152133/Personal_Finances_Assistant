@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditUserProfileRequest;
 use App\Http\Requests\ChangeUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 class AccountController extends Controller
 {
@@ -29,25 +30,27 @@ class AccountController extends Controller
     }
 
 
-    public function listAllAccouts()
+    public function listAllAccouts($user_id)
     {
         $accounts = Account::withTrashed()
             ->join('account_types', 'account_types.id', '=', 'accounts.account_type_id')
-            ->where('owner_id', '=', Auth::user()->id)
+            ->where('owner_id', '=', $user_id)
             ->select('accounts.*','account_types.name')
             ->get();
         
-        return view('accounts.listAllAccounts', compact('accounts'));
+        return view('accounts.listAllAccounts', compact('accounts', 'user_id'));
     }
 
     public function edit (Account $account){
-
+        if(Gate::allows('edit-account', $account->id)) {
         $account_types = DB::table('account_types')
                         ->select('account_types.*')
                         ->get();
         
        
         return view('accounts.editAccounts', compact('account', 'account_types'));
+    }
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
 

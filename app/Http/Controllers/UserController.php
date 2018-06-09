@@ -21,114 +21,97 @@ class UserController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request){
+    public function edit(Request $request){
 		$users = User::All();
 
 		$name = $request->input('name');
 		$admin = $request->input('admin');
 		$blocked = $request->input('blocked');
-
-        
-            $users = User::where('name','like','%'.$name.'%')
-            ->where('admin','like','%'.$admin.'%')
-            ->where('blocked','like','%'.$blocked.'%')
-            ->orderBy('name')
-            ->paginate(15);
-        
-
-		
+    
+        $users = User::where('name','like','%'.$name.'%')
+        ->where('admin','like','%'.$admin.'%')
+        ->where('blocked','like','%'.$blocked.'%')
+        ->orderBy('name')
+        ->paginate(5);
 
 		return view('users.listUsers', compact('users'));
-		//dd($this);
     }
 
     public function block(User $user){
 
     	if ($user->id == Auth::user()->id) {
-    		return response ('Unauthorized action!', 403);//redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível bloquear o utilizador atual! ']);
+    		return abort (403, 'Unauthorized action!');
     	}
 
         if (Gate::allows('administrate', Auth::user())) {
                 DB::table('users')
                     ->where('id', $user->id)
                     ->update(['blocked' => 1]);
-        return redirect()->action('UserController@index');
+        return redirect()->action('UserController@edit');
         }
-        	
-		
-		
 
-        return response ('Unauthorized action!', 403);
-    	
-		
+        return abort (403, 'Unauthorized action!');
 	}
 
 	public function unblock(User $user){
 		if ($user->id == Auth::user()->id) {
-            return response ('Unauthorized action!', 403);
-    		//return redirect()->action('UserController@index')->with(['msgglobal' => 'Impossível desbloquear o utilizador atual! ']);
+            return abort (403, 'Unauthorized action!');
     	}
-            
+
         if (Gate::allows('administrate', Auth::user())) {
                 DB::table('users')
                     ->where('id', $user->id)
                     ->update(['blocked' => 0]);
-
-        return redirect()->action('UserController@index');
+            return redirect()->action('UserController@edit');
         }
-			
-			
-		
 
-        return response ('Unauthorized action!', 403);
-		
+        return abort (403, 'Unauthorized action!');
 	}
 
 	public function promote(User $user)
 	{
 		if ($user->id == Auth::user()->id) {
-    		return response ('Unauthorized action!', 403);
+    		return abort (403, 'Unauthorized action!');
     	}
 
         if (Gate::allows('administrate')) {
             DB::table('users')
                 ->where('id', $user->id)
                 ->update(['admin' => 1]);
-
-        return redirect()->action('UserController@index');
+        return redirect()->action('UserController@edit');
         }
-			
-	   
-       return response ('Unauthorized action!', 403);
-			
-		
+
+       return abort (403, 'Unauthorized action!');
 	}
 
 	public function demote(User $user)
 	{
 		if ($user->id == Auth::user()->id) {
-    		return response ('Unauthorized action!', 403);
+    		return abort (403, 'Unauthorized action!');
     	}
 
         if (Gate::allows('administrate')) {
             DB::table('users')
                 ->where('id', $user->id)
                 ->update(['admin' => 0]);
-        return redirect()->action('UserController@index');
+        return redirect()->action('UserController@edit');
         }
 			
-			
-		return response ('Unauthorized action!', 403);
-		
+		return abort (403, 'Unauthorized action!');
 	}
 
     public function addToMyGroup(User $user)
     {
         if ($user == Auth::user()) {
-            return redirect()->action('UserController@listProfiles')->with(['msgglobal' => 'Impossível adicionar o utilizador atual à sua lista de associados! ']);
+            return abort (403, 'Unauthorized action!');
         }else{
-            Auth::user()->associatedMembers()->attach($user->id);
             
+            DB::table('associate_members')
+                ->insert(array(
+                    'main_user_id' => Auth::id(),
+                    'associated_user_id' => $user->id,
+                    'created_at' =>  \Carbon\Carbon::now(), # \Datetime()
+            ));
             $user->save();
 
             return redirect()->back();
@@ -138,23 +121,22 @@ class UserController extends Controller
     public function removeFromMyGroup(User $user)
     {
         if ($user == Auth::user()) {
-            return redirect()->action('UserController@listProfiles')->with(['msgglobal' => 'Impossível remover o utilizador atual à sua lista de associados! ']);
+            return abort (403, 'Unauthorized action!');
         }else{
             Auth::user()->associatedMembers()->detach($user->id);
+            $user->save();
             
             return redirect()->back();
         }
     }
 
-
    public function pesquisar()
    {
-        $search = \Request::get('search'); //<-- we use global request to get the param of URI
-     
+        $search = \Request::get('search');
         $users = User::where('name','like','%'.$search.'%')
             ->orderBy('name')
             ->paginate(15);
-           
+
         return view('users.list',compact('users'));
 	}	
 
@@ -168,7 +150,6 @@ class UserController extends Controller
             ->paginate(5);
 
         $me = Auth::user();
-
         $associatedMembersIds = [];
         $associatedToIds = [];
 
@@ -183,7 +164,7 @@ class UserController extends Controller
         return view('users.listProfiles', compact('users', 'associatedMembersIds', 'associatedToIds', 'me'));
     }
 
-    public function editProfile(User $user)
+    public function editProfile()
     {
         $user = Auth::user();
         $user->can('update');
@@ -202,7 +183,6 @@ class UserController extends Controller
         }
 
         $user = $request->validated();
-        
         $userModel = User::findOrFail(Auth::user()->id);
         $userModel->fill($user);
 
@@ -221,6 +201,7 @@ class UserController extends Controller
 	public function editPassword()
     {
         $user = Auth::user();
+        $user->can('update');
         return view('users.editPassword', compact('user'));
     }
 
@@ -234,7 +215,9 @@ class UserController extends Controller
         $user->fill($data);
         $user->save();
 
-        return redirect()->action('DashboardController@index', Auth::user());
+        return redirect()
+            ->action('dashboard', Auth::user())
+            ->with('success', 'Password changed successfully.');;
     }
 
     public function listAssociateOf()

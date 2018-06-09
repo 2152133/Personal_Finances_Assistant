@@ -2,15 +2,9 @@
 
 @section('content')
 
+
 @if (count($users))
 <div class="container">
-    <h3>
-        @if ($users->count() == 1)
-            {{ $users->count() }} User
-        @else
-            {{ $users->count() }} Users
-        @endif
-    </h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -35,7 +29,7 @@
                     {{ $user->email }}
                 </td>
                 <td>
-                    <a href="{{ url('/accounts/'.$user->name) }}">
+                    <a href="{{ url('/accounts/'.$user->id) }}">
                         List of accounts
                     </a>
                 </td>
@@ -51,4 +45,5 @@
     </h2>
 </div>
 @endif
+
 @endsection

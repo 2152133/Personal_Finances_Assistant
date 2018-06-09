@@ -25,15 +25,33 @@ class MovementController extends Controller
     }
 
     public function listAllMovements($account){
-
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
                     ->leftJoin('documents', 'movements.document_id', '=', 'documents.id')
                     ->where('accounts.id', '=', $account)
-                    ->select('movements.*', 'documents.original_name')
+                    ->select('movements.*', 'documents.original_name', 'movement_categories.name')
                     ->orderBy('id', 'desc')
                     ->get();
     	
     	return view('movements.listAllMovements', compact('movements', 'account'));
+    }
+
+    public function viewFile($document_id){
+        $document = Document::find($document_id); 
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+        $fileId = $movement->id . '.' . $document->type;
+        $file = new \File(storage_path('app/documents/') . $movement->account_idt);
+        
+        return response()->file(storage_path('app/documents/' . $movement->account_id . '/' . $fileId), compact('document->original_name'));
+    }
+
+    public function downloadFile($document_id){
+        $document = Document::find($document_id); 
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+        $fileId = $movement->id . '.' . $document->type;
+        $file = new \File(storage_path('app/documents/') . $movement->account_idt);
+
+        return response()->download(storage_path('app/documents/' . $movement->account_id . '/' . $fileId), $document->original_name);
     }
 
     public function create($account)
@@ -48,7 +66,6 @@ class MovementController extends Controller
             return redirect()->action('DashboardController@index', Auth::user());
         }
 
-        
         $movement = $request->validate([
             'type' => 'required',
             'movement_category_id' => 'required',
