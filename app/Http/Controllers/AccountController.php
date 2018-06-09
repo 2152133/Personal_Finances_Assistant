@@ -128,10 +128,13 @@ class AccountController extends Controller
             $movements = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
                         ->where('movements.account_id', '=', $id)
                         ->select('movements.*')
+                        ->orderBy('movements.date', 'asc')
                         ->orderBy('movements.id', 'asc')
                         ->get();
 
         }
+
+        
 
         $accountCode = Account::findOrFail($id);
 
@@ -195,11 +198,13 @@ class AccountController extends Controller
                 }
 
                 if ($i == (count($movements))-1) {
-                    $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    $lastMovement = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->where('accounts.id', '=', $id)
-                    ->max('movements.id');
+                    ->orderBy('movements.date', 'desc')
+                    ->orderBy('movements.id', 'desc')
+                    ->first();
 
-                    $lastMovement = Movement::findOrFail($lastMovementId);
+                    //$lastMovement = Movement::findOrFail($lastMovementId);
                    $current_balance=$lastMovement->end_balance;
                 }
                 

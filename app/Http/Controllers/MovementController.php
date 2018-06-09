@@ -30,6 +30,7 @@ class MovementController extends Controller
                     ->leftJoin('documents', 'movements.document_id', '=', 'documents.id')
                     ->where('accounts.id', '=', $account)
                     ->select('movements.*', 'documents.original_name', 'movement_categories.name')
+                    ->orderBy('date', 'desc')
                     ->orderBy('id', 'desc')
                     ->get();
     	
@@ -51,10 +52,10 @@ class MovementController extends Controller
 
         $movement = $request->validate([
             'type' => 'required',
-            'movement_category_id' => 'required',
-            'date' => 'required',
-            'value' => 'required',
-            'description' => 'nullable',
+            'movement_category_id' => 'required|min:1|max:14',
+            'date' => 'required|date',
+            'value' => 'required|integer',
+            'description' => 'nullable|string',
             ]);
 
         $movement['account_id'] = $account;
@@ -74,11 +75,14 @@ class MovementController extends Controller
                 $movement['end_balance'] = $contaAtual->start_balance + $request->value; 
             }
         }else{
-            $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+            $lastMovement = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->where('accounts.id', '=', $account)
-                    ->max('movements.id');
-
-            $lastMovement = Movement::findOrFail($lastMovementId);
+                    ->where('movements.date', '<=', $request->date)
+                    ->select('movements.*')
+                    ->orderBy('movements.date', 'desc')
+                    ->orderBy('movements.id', 'desc')
+                    ->first();
+            //$lastMovement = Movement::findOrFail($lastMovementId);
 
             
             $movement['start_balance'] = $lastMovement->end_balance;
@@ -88,15 +92,102 @@ class MovementController extends Controller
             }else{
                 $movement['end_balance'] = $lastMovement->end_balance + $request->value; 
             }
+
+            $movementsUp = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $account)
+                    ->where('movements.date', '>', $request->date)
+                    ->select('movements.*')
+                    ->orderBy('movements.date', 'asc')
+                    ->orderBy('movements.id', 'asc')
+                    ->get();
+
+
+        
+            if (count($movementsUp)>0) {
+                for ($i=0; $i < count($movementsUp); $i++) {
+                    if ($i==0) {
+                        if ($request->type=='expense') {
+                            Movement::where('id', '=', $movementsUp[$i]->id)
+                                ->update(['end_balance' => ($lastMovement->end_balance - $request->value) - $movementsUp[$i]->value,
+                                          'start_balance' => $lastMovement->end_balance - $request->value]);
+                        }else{
+                            Movement::where('id', '=', $movementsUp[$i]->id)
+                                ->update(['end_balance' => ($lastMovement->end_balance + $request->value) + $movementsUp[$i]->value,
+                                          'start_balance' => $lastMovement->end_balance + $request->value]);
+                        }
+                    }else{
+                        $end_balance_movement = Account::join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $account)
+                                ->where('movements.id', '=', $movementsUp[($i-1)]->id)
+                                ->select('movements.end_balance')
+                                ->first();
+
+                     
+                        if ($movementsUp[$i]->type == 'expense') {
+                            DB::table('accounts')
+                                ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $account)
+                                ->where('movements.id', '=', $movementsUp[$i]->id)
+                                ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                        'movements.end_balance' => ($end_balance_movement->end_balance - $movementsUp[$i]->value) ]);
+                            
+
+                        }else{
+                            DB::table('accounts')
+                                ->join('movements', 'movements.account_id', '=', 'accounts.id')
+                                ->where('accounts.id', '=', $account)
+                                ->where('movements.id', '=', $movementsUp[$i]->id)
+                                ->update(['movements.start_balance' => $end_balance_movement->end_balance,
+                                        'movements.end_balance' => ($end_balance_movement->end_balance + $movementsUp[$i]->value)]);
+                        }
+                    }   
+                }
+            }
         }
 
-        Account::where('id', '=', $account)
-                ->update(['current_balance' => $movement['end_balance']]);
+        if (count($numMovements) == 0) {
+            if ($request->type=='expense') {
+                $contaCurrBalance = $contaAtual->start_balance - $request->value; 
+            }else{
+                $contaCurrBalance = $contaAtual->start_balance + $request->value; 
+            }
+
+            Account::where('id', '=', $account)
+                ->update(['current_balance' => $contaCurrBalance]);
+        }
+            
+        
+
+        
+
+        /*DB::table('accounts')
+                ->where('accounts.id', '=', $movementModel->account_id)
+                ->update(['accounts.current_balance' => $lastMovement->end_balance]);*/
+
+        
         
         
         
         
         Movement::create($movement);
+
+        $numMov = Movement::where('account_id', '=', $account)
+                                ->select('movements.*')
+                                ->get();
+
+
+        if (count($numMov) > 0) {
+            $lastMovement = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $account)
+                    ->select('movements.*')
+                    ->orderBy('date', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->first();
+            
+
+            Account::where('id', '=', $account)
+                ->update(['current_balance' => $lastMovement->end_balance]);
+        }
         
         return redirect()->action('DashboardController@index', Auth::user());
     }
@@ -123,12 +214,6 @@ class MovementController extends Controller
         $numMovements = Movement::where('account_id', '=', $movementModel->account_id)
                                 ->select('movements.*')
                                 ->get();
-        
-        $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
-                    ->where('accounts.id', '=', $movementModel->account_id)
-                    ->max('movements.id');
-
-        $lastMovement = Movement::findOrFail($lastMovementId);
 
         $contaAtual = Account::findOrFail($movementModel->account_id);
         
@@ -147,11 +232,13 @@ class MovementController extends Controller
         
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->where('accounts.id', '=', $movementModel->account_id)
-                    ->where('movements.id', '>=', $id)
+                    ->where('movements.date', '>=', $request->date)
                     ->select('movements.*')
+                    ->orderBy('movements.date', 'asc')
                     ->orderBy('movements.id', 'asc')
                     ->get();
-        //dd($movements[0]);
+
+        
         if (count($movements)>0) {
             for ($i=0; $i < count($movements); $i++) {
                 if ($i==0) {
@@ -191,13 +278,19 @@ class MovementController extends Controller
             }
         }
 
-
                 
-        $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+        /*$lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
         ->where('accounts.id', '=', $movementModel->account_id)
         ->max('movements.id');
 
-        $lastMovement = Movement::findOrFail($lastMovementId);
+        $lastMovement = Movement::findOrFail($lastMovementId);*/
+
+        $lastMovement = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $movementModel->account_id)
+                    ->select('movements.*')
+                    ->orderBy('date', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->first();
 
         DB::table('accounts')
                 ->where('accounts.id', '=', $movementModel->account_id)
@@ -232,8 +325,9 @@ class MovementController extends Controller
 
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->where('accounts.id', '=', $movement->account_id)
-                    ->where('movements.id', '>=', $id)
+                    ->where('movements.date', '>=', $movement->date)
                     ->select('movements.*')
+                    ->orderBy('movements.date', 'asc')
                     ->orderBy('movements.id', 'asc')
                     ->get();
 
@@ -288,11 +382,13 @@ class MovementController extends Controller
         $movement->delete();
 
         if (count($numMovements)>1) {
-            $lastMovementId = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
-            ->where('accounts.id', '=', $movement->account_id)
-            ->max('movements.id');
 
-            $lastMovement = Movement::findOrFail($lastMovementId);
+            $lastMovement = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
+                    ->where('accounts.id', '=', $movement->account_id)
+                    ->select('movements.*')
+                    ->orderBy('date', 'desc')
+                    ->orderBy('id', 'desc')
+                    ->first();
 
             DB::table('accounts')
                     ->where('accounts.id', '=', $movement->account_id)
