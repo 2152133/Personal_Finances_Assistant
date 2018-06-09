@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
-
+use Illuminate\Support\Facades\Input;
 class MovementController extends Controller
 {
             /**
@@ -350,21 +350,44 @@ class MovementController extends Controller
     }
 
 
-    public function storeDocument(Request $request, $movement){
+    public function storeDocument(Request $request, $id){
         if ($request->has('cancel')) {
             return redirect()->action('DashboardController@index', Auth::user());
         }
-        
+
+        $movement = Movement::findOrFail($id);
+
         $document = $request->validate([
-            'original_name' => 'mimes:jpeg,jpg,png|nullable|max:1999|file',
+            'original_name' => 'mimes:jpeg,jpg,png|required|max:1999|file',
             'description' => 'nullable',
         ]);
-        
-        
-        
-        Document::create($document);
-        
+
+        $file = $request->file('original_name');
+
+
+        if ($file != null) {
+            $document = Document::create([
+                'original_name' => $file->getClientOriginalName(),
+                'description' => $request->input('description'),
+                'type' => $file->getClientOriginalExtension(),
+            ]);
+        }
+
+        if ($file != null) {
+            if ($file->isValid()) {
+                $name = $movement->id . '.' . $file->getClientOriginalExtension();
+                Storage::disk('local')->putFileAs('documents/' . $movement->account_id, $file, $name);
+            }
+        }
+
+
+
+        Movement::where('movements.id', '=', $id)
+                    ->update([
+                        'movements.document_id' => $document->id
+                    ]);
         
         return redirect()->action('DashboardController@index', Auth::user());
+
     }
 }
