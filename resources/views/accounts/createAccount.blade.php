@@ -13,7 +13,7 @@
                                 {{ __('Account Type') }}
                             </label>
                             <div class="col-md-6">
-                                <select class="form-control" id="account_type_id" name="account_type_id">
+                                <select class="form-control{{ $errors->has('account_type_id') ? ' is-invalid' : '' }}" id="account_type_id" name="account_type_id">
                                     <option disabled="" selected="">
                                         -- select an option --
                                     </option>
@@ -37,7 +37,7 @@
                                 {{ __('Date') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="date" name="date" type="date" value="{{ old('date') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('date') ? ' is-invalid' : '' }}" id="date" name="date" type="date" value="{{ old('date', $account->date) }}">
                                     @if ($errors->has('date'))
                                     <span class="invalid-feedback">
                                         <strong>
