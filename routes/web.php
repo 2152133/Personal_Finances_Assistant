@@ -68,10 +68,6 @@ Route::get('/account/{account}', 'AccountController@edit');
 Route::put('/account/{account}', 'AccountController@updateAccount')->name('user.updateAccount');
 
 
-Route::get('/view/{movement}', 'MovementController@viewFile');
-Route::get('/download/{movement}', 'MovementController@downloadFile');
-
-
 // US20 -> list movements
 Route::get('/movements/{account}', 'MovementController@listAllMovements')->middleware('can:view-account-movements,account');
 
