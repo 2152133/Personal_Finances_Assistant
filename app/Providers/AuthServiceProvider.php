@@ -60,6 +60,13 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-account', function ($user, $account_id) {
             return ($user->id == $this->accountOwnerId($account_id));
         });
+
+        Gate::define('add-document', function ($user, $movement_id) {
+            $movement = Movement::find($movement_id)
+                                    join('accounts', 'movements.account_id', '=', 'accounts.id')
+                                    select('movements.*', 'accounts.owner_id');
+            return ($user->id == $movement->owner_id);
+        });
     }
 
     public function accountOwnerId($account_id){

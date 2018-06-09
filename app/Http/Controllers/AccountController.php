@@ -100,7 +100,7 @@ class AccountController extends Controller
             'account_type_id' => 'required|integer|min:1|max:5',
             'date' => 'nullable|date',
             'code' => 'required|unique:accounts',
-            'start_balance' => 'required|integer',
+            'start_balance' => 'required|numeric',
             'description' => 'nullable|string',
             ]);
         

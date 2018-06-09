@@ -39,8 +39,15 @@ class MovementController extends Controller
     public function create($account)
     {
         Account::findOrFail($account);
-        $movement = new Movement;
-        return view('movements.createMovement', compact('movement', 'account'));
+        
+        if(Gate::allows('edit-account', $account)){
+            $movement = new Movement;
+            return view('movements.createMovement', compact('movement', 'account'));
+        }
+        
+        return abort(403, 'Unauthorized action.');
+        
+        
     }
 
     public function store(Request $request, $account)
@@ -51,9 +58,9 @@ class MovementController extends Controller
 
         $movement = $request->validate([
             'type' => 'required',
-            'movement_category_id' => 'required',
-            'date' => 'required',
-            'value' => 'required',
+            'movement_category_id' => 'required|integer',
+            'date' => 'required|date',
+            'value' => 'required|numeric|min:0.01',
             'description' => 'nullable',
             ]);
 

@@ -134,10 +134,9 @@ class UserStory21ATest extends BaseAccountsTest
         // Given, When, Then
         $account = $this->seedOpenedAccountsForUser($this->mainUser->id)
             ->first();
-        $this->actingAs($this->mainUser)
+        $coiso = $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create')
-            ->assertSessionHasErrors(['movement_category_id', 'date', 'value'])
-            ->assertSessionHasNoErrors(['description', 'document_file', 'document_description']);
+            ->assertSessionHasErrors(['movement_category_id', 'date', 'value']);
     }
 
     // @codingStandardsIgnoreStart
@@ -149,15 +148,14 @@ class UserStory21ATest extends BaseAccountsTest
         $account = $this->seedOpenedAccountsForUser($this->mainUser->id)
             ->first();
         $data = [
-            'movement_category_id' => 200000,
+            'movement_category_id' => 20000000,
             'date' => Carbon::now()->subDays(2)->format('Y-m-d'),
             'value' => 1,
         ];
 
         $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create', $data)
-            ->assertSessionHasErrors(['movement_category_id'])
-            ->assertSessionHasNoErrors(['date', 'value', 'description', 'document_file', 'document_description']);
+            ->assertSessionHasErrors(['movement_category_id']);
     }
 
     // @codingStandardsIgnoreStart
@@ -198,10 +196,7 @@ class UserStory21ATest extends BaseAccountsTest
 
         $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create', $data)
-            ->assertSessionHasErrors(['date'])
-            ->assertSessionHasNoErrors([
-                'movement_category_id', 'value', 'description', 'document_file', 'document_description'
-            ]);
+            ->assertSessionHasErrors(['date']);
     }
 
     // @codingStandardsIgnoreStart
@@ -220,10 +215,7 @@ class UserStory21ATest extends BaseAccountsTest
 
         $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create', $data)
-            ->assertSessionHasErrors(['value'])
-            ->assertSessionHasNoErrors([
-                'movement_category_id', 'date', 'description', 'document_file', 'document_description'
-            ]);
+            ->assertSessionHasErrors(['value']);
     }
 
     // @codingStandardsIgnoreStart
@@ -242,10 +234,7 @@ class UserStory21ATest extends BaseAccountsTest
 
         $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create', $data)
-            ->assertSessionHasErrors(['value'])
-            ->assertSessionHasNoErrors([
-                'movement_category_id', 'date', 'description', 'document_file', 'document_description'
-            ]);
+            ->assertSessionHasErrors(['value']);
     }
 
     // @codingStandardsIgnoreStart
@@ -264,10 +253,7 @@ class UserStory21ATest extends BaseAccountsTest
 
         $this->actingAs($this->mainUser)
             ->post('/movements/'.$account->id.'/create', $data)
-            ->assertSessionHasErrors(['value'])
-            ->assertSessionHasNoErrors([
-                'movement_category_id', 'date', 'description', 'document_file', 'document_description'
-            ]);
+            ->assertSessionHasErrors(['value']);
     }
 
     // @codingStandardsIgnoreStart
@@ -308,7 +294,6 @@ class UserStory21ATest extends BaseAccountsTest
             ->assertSessionHasNoErrors([
                 'value', 'movement_category_id', 'date', 'description', 'document_file', 'document_description'
             ]);
-
         $data['account_id'] = $account->id;
         $data['type'] = 'expense';
 
