@@ -14,9 +14,10 @@
                     <th>Category ID</th>
                     <th>Date</th>
                     <th>Value</th>
+                    <th>Description</th>
+                    <th>Document</th>
                     <th>Start Balance</th>
                     <th>End Balance</th>
-                    <th>Description</th>
                     <th>Type</th>
                     <th>Actions</th>
                 </tr>
@@ -28,9 +29,21 @@
                     <td>{{$movement->movement_category_id}}</td>
                     <td>{{$movement->date}}</td>
                     <td>{{$movement->value}}</td>
+                    <td>{{$movement->description}}</td>
+                    <td>@if(isset($movement->document_id))
+                        <a class="btn btn-primary" href="{{ action('MovementController@download', $movement->document_id) }}">Download</a>
+                        <a class="btn btn-primary" href="{{ action('MovementController@view', $movement->document_id) }}">View</a>
+                        <form action="{{ action('MovementController@deleteDocument', $movement->document_id) }}" method="post" class="inline">
+                            @csrf
+                            @method('delete')
+                            <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                        @else
+                            <a class="btn btn-success" href="{{ action('MovementController@createDocument', $movement->id) }}">Add Document</a>
+                        @endif
+                    </td>
                     <td>{{$movement->start_balance}}</td>
                     <td>{{$movement->end_balance}}</td>
-                    <td>{{$movement->description}}</td>
                     <td>{{$movement->type}}</td>
                     <td>
                         <a class="btn btn-xs btn-primary" href="{{ action('MovementController@edit', $movement->id) }}">Edit Movement</a>

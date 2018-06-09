@@ -77,6 +77,18 @@ Route::get('/movement/{movement}', 'MovementController@edit');
 Route::put('/movement/{movement}', 'MovementController@update')->name('user.updateMovement');
 Route::delete('/movement/{movement}', 'MovementController@delete');
 
+
+//US23 -> add document
+Route::get('/documents/{movement}', 'MovementController@createDocument');
+Route::post('/documents/{movement}', 'MovementController@storeDocument');
+	
+//US24 -> delete document
+Route::delete('/document/{document}', 'MovementController@deleteDocument');
+
+//US25 -> download/view document
+Route::get('/document/download/{document}', 'MovementController@download');
+Route::get('/document/view/{document}', 'MovementController@view');
+
 // US26 user dashboard page
 Route::get('/dashboard/{user}', 'DashboardController@index')->name('dashboard');
 
