@@ -3,18 +3,14 @@
 
 @can('view-account-movements', $account)
 <div class="container">
-    @can('view-account-movements', $account)
-        @can('edit-account', $account)
+    @can('edit-account', $account)
     <div class="text-right">
         <a class="btn btn-primary" href="{{ action('MovementController@create', $account) }}">
             Add movement
         </a>
     </div>
-    <br>
-        @endcan
-            
-        @endcan
-        
+    <br>        
+    @endcan
         @if (count($movements))
         <table class="table table-striped">
             <thead>
@@ -80,23 +76,25 @@
                     <td>
                         {{$movement->type}}
                     </td>
-                    {{--
-                    <td>
-                        {{$movement->document_id}}
-                    </td>
-                    --}}
-                    <td>
-                        @if ($movement->document_id != null)
-                        <a class="btn btn-xs btn-primary" href="{{ action('MovementController@viewFile', $movement->document_id) }}">
-                            View
-                        </a>
-                        <a class="btn btn-xs btn-primary" href="{{ action('MovementController@downloadFile', $movement->document_id) }}">
-                            Download
-                        </a>
-                        @endif
-                        {{-- {{ dd(action('MovementController@viewFile', $movement->document_id)) }} --}}
 
-                    </td>
+                        <td>
+                            @if(isset($movement->document_id))
+                                <a class="btn btn-primary" href="{{ action('MovementController@download', $movement->document_id) }}">Download</a>
+                                <a class="btn btn-primary" href="{{ action('MovementController@view', $movement->document_id) }}">View</a>
+                                @can('edit-account', $account)
+                                <form action="{{ action('MovementController@deleteDocument', $movement->document_id) }}" method="post" class="inline">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="submit" class="btn btn-danger" value="Delete">
+                                </form>
+                                @endcan
+                            @else
+                                @can('edit-account', $account)
+                                    <a class="btn btn-success" href="{{ action('MovementController@createDocument', $movement->id) }}">Add Document</a>
+                                @endcan
+                            @endif
+                            
+                        </td>
                     @can('edit-account', $account)
                     <td>
                         <a class="btn btn-xs btn-primary" href="{{ action('MovementController@edit', $movement->id) }}">

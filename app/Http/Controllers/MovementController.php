@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Movement;
-use App\Document;
 use App\Account;
+use App\Document;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use League\Flysystem\Filesystem;
 
 class MovementController extends Controller
 {
@@ -25,8 +27,9 @@ class MovementController extends Controller
     public function listAllMovements($account){
         $movements = Movement::join('accounts', 'accounts.id','=', 'movements.account_id')
                     ->join('movement_categories', 'movements.movement_category_id', '=', 'movement_categories.id')
+                    ->leftJoin('documents', 'movements.document_id', '=', 'documents.id')
                     ->where('accounts.id', '=', $account)
-                    ->select('movements.*', 'movement_categories.name')
+                    ->select('movements.*', 'documents.original_name', 'movement_categories.name')
                     ->orderBy('id', 'desc')
                     ->get();
     	
@@ -312,6 +315,72 @@ class MovementController extends Controller
                     ->where('accounts.id', '=', $movement->account_id)
                     ->update(['accounts.current_balance' => $lastMovement->end_balance]);
         }
+        
+        return redirect()->action('DashboardController@index', Auth::user());
+    }
+
+    public function download($id)
+    {
+
+        $movement = DB::table('documents')
+                    ->join('movements', 'movements.document_id',  '=', 'documents.id')
+                    ->where('documents.id', '=', $id)
+                    ->select('movements.id', 'movements.account_id', 'documents.type')
+                    ->first();
+
+
+        return Storage::disk('local')->download('documents/' . $movement->account_id . '/' . $movement->id . '.' . $movement->type);
+
+    }
+
+    public function view($id)
+    {
+        $movement = DB::table('documents')
+                    ->join('movements', 'movements.document_id',  '=', 'documents.id')
+                    ->where('documents.id', '=', $id)
+                    ->select('movements.id', 'movements.account_id', 'documents.type')
+                    ->first();
+
+
+        //dd(Storage::url('documents/' . $movement->account_id . '/' . $movement->id . '.png'));
+        return response()->file(storage_path('app/documents/' . $movement->account_id . '/' . $movement->id . '.' . $movement->type));
+
+    }
+
+    public function deleteDocument($id)
+    {
+        $document = Document::findOrFail($id);
+
+        Movement::where('movements.document_id', '=', $id)
+                    ->update(['movements.document_id' =>  NULL]);
+        
+        $document->delete();
+
+        return redirect()->action('DashboardController@index', Auth::user());
+
+    }
+
+    public function createDocument($movement){
+        $document = new Document;
+        
+        return view('documents.createDocument', compact('document', 'movement'));
+    }
+
+
+    public function storeDocument(Request $request, $movement){
+        if ($request->has('cancel')) {
+            return redirect()->action('DashboardController@index', Auth::user());
+        }
+        
+        $document = $request->validate([
+            'original_name' => 'mimes:jpeg,jpg,png|nullable|max:1999|file',
+            'description' => 'nullable',
+        ]);
+        
+        
+        
+        Document::create($document);
+        
         
         return redirect()->action('DashboardController@index', Auth::user());
     }
