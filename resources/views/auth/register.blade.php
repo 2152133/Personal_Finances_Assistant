@@ -16,7 +16,7 @@
                                 {{ __('Name') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" required="" type="text" value="{{ old('name') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" name="name" type="text" value="{{ old('name') }}">
                                     @if ($errors->has('name'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -32,7 +32,7 @@
                                 {{ __('E-Mail Address') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email') }}">
+                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" type="email" value="{{ old('email') }}">
                                     @if ($errors->has('email'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -48,7 +48,7 @@
                                 {{ __('Password') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" required="" type="password">
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="password" name="password" type="password">
                                     @if ($errors->has('password'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -73,7 +73,7 @@
                                 {{ __('Phone Number') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone') }}">
+                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone') }}" optional>
                                     @if ($errors->has('phone'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -84,13 +84,12 @@
                                 </input>
                             </div>
                         </div>
-                        {{-- begin --}}
                         <div class="form-group row">
                             <label class="col-md-4 col-form-label text-md-right" for="profile_photo">
                                 {{ __('Profile Picture') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}">
+                                <input autofocus="" class="{{ $errors->has('profile_photo') ? ' is-invalid' : '' }}" id="profile_photo" name="profile_photo" type="file" value="{{ old('profile_photo') }}" optional>
                                     @if ($errors->has('profile_photo'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -101,7 +100,6 @@
                                 </input>
                             </div>
                         </div>
-                        {{-- end --}}
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button class="btn btn-primary" type="submit">
