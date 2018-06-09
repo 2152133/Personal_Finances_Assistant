@@ -37,9 +37,10 @@ class AuthServiceProvider extends ServiceProvider
              return ($user->admin == 0 || $user->admin == 1);
         });
 
-        Gate::define('view-account-movements', function ($user, $account_id) {
+
+        Gate::define('view-account-movements', function ($user, $account_id) { 
             Account::findOrFail($account_id);
-            return $user->id == $this->accountOwnerId($account_id);
+            return $user->id == $this->accountOwnerId($account_id) || $user->associatedTo->toArray()[0]['id'] == $this->accountOwnerId($account_id);
         });
 
         Gate::define('view-user-accounts', function ($user, $userIWantToSee_id) {
@@ -55,11 +56,14 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('edit-delete-user-accounts', function ($user, $userIWantToSee_id) {
             return ($user->id == $userIWantToSee_id);
         });
+
+        Gate::define('edit-account', function ($user, $account_id) {
+            return ($user->id == $this->accountOwnerId($account_id));
+        });
     }
 
     public function accountOwnerId($account_id){
-        $accounts = Account::where('id', $account_id)->get();
-        $account = $accounts[0];
+        $account = Account::find($account_id);
         return $account['owner_id'];
     }
 }

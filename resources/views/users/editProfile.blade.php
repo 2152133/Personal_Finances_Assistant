@@ -4,12 +4,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(session('errors'))
+                @include('partials.errors')
+            @endif
             <div class="card">
                 <div class="card-header">
                     {{ __('Edit Profile') }}
                 </div>
                 <div class="card-body">
-                    <form enctype="multipart/form-data" action="{{ route('user.updateProfile') }}" method="POST">
+                    <form action="{{ route('user.updateProfile') }}" enctype="multipart/form-data" method="POST">
                         @csrf
                         @method('put')
                         <div class="form-group row">
@@ -33,7 +36,7 @@
                                 {{ __('E-Mail Address') }}
                             </label>
                             <div class="col-md-6">
-                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" type="email" value="{{ old('email', $user->email) }}" required>
+                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="email" name="email" required="" type="email" value="{{ old('email', $user->email) }}">
                                     @if ($errors->has('email'))
                                     <span class="invalid-feedback">
                                         <strong>
@@ -49,7 +52,7 @@
                                 {{ __('Phone Number') }}
                             </label>
                             <div class="col-md-6">
-                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" type="text" value="{{ old('phone', $user->phone) }}" optional>
+                                <input autofocus="" class="form-control{{ $errors->has('phone') ? ' is-invalid' : '' }}" id="phone" name="phone" optional="" type="text" value="{{ old('phone', $user->phone) }}">
                                     @if ($errors->has('phone'))
                                     <span class="invalid-feedback">
                                         <strong>

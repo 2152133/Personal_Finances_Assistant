@@ -4,13 +4,6 @@
 
 @if (count($users))
 <div class="container">
-    <h3>
-        @if ($users->count() == 1)
-            {{ $users->count() }} User
-        @else
-            {{ $users->count() }} Users
-        @endif
-    </h3>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -19,6 +12,9 @@
                 </th>
                 <th>
                     Email
+                </th>
+                <th>
+                    Action
                 </th>
             </tr>
         </thead>
