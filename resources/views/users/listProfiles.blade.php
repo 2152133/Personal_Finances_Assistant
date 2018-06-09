@@ -12,18 +12,19 @@
         @endif
     </h3>
     <div>
-        {!! Form::open(['method'=>'GET','route'=>'user.listProfiles','class'=>'navbar-form navbar-left','role'=>'search'])  !!}
+        {{-- {!! Form::open(['method'=>'GET','route'=>'user.listProfiles','class'=>'navbar-form navbar-left','role'=>'search'])  !!} --}}
+        <form action="{{ route('user.listProfiles') }}" class="navbar-form navbar-left" method="get" role="search">
         <div class="input-group custom-search-form">
             <input class="form-control" name="name" placeholder="Search..." type="text"/>
             <span class="input-group-btn">
                 <button class="btn btn-default-sm" type="submit">
                     <i class="fa fa-search">
-                        Submit
+                        Search
                     </i>
                 </button>
             </span>
         </div>
-        {!! Form::close() !!}
+        </form>
     </div>
     <table class="table table-striped">
         <thead>
@@ -36,6 +37,9 @@
                 </th>
                 <th>
                     Association
+                </th>
+                <th>
+                    Action
                 </th>
             </tr>
         </thead>

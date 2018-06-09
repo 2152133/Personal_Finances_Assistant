@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditUserProfileRequest;
 use App\Http\Requests\ChangeUserPasswordRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
 
 class AccountController extends Controller
 {
@@ -41,13 +42,15 @@ class AccountController extends Controller
     }
 
     public function edit (Account $account){
-
+        if(Gate::allows('edit-account', $account->id)) {
         $account_types = DB::table('account_types')
                         ->select('account_types.*')
                         ->get();
         
        
         return view('accounts.editAccounts', compact('account', 'account_types'));
+    }
+        return redirect()->action('DashboardController@index', Auth::user());
     }
 
 

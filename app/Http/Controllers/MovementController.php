@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Movement;
+use App\Document;
 use App\Account;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,24 @@ class MovementController extends Controller
     	return view('movements.listAllMovements', compact('movements', 'account'));
     }
 
+    public function viewFile($document_id){
+        $document = Document::find($document_id); 
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+        $fileId = $movement->id . '.' . $document->type;
+        $file = new \File(storage_path('app/documents/') . $movement->account_idt);
+        
+        return response()->file(storage_path('app/documents/' . $movement->account_id . '/' . $fileId), compact('document->original_name'));
+    }
+
+    public function downloadFile($document_id){
+        $document = Document::find($document_id); 
+        $movement = Movement::where('document_id', '=', $document->id)->first();
+        $fileId = $movement->id . '.' . $document->type;
+        $file = new \File(storage_path('app/documents/') . $movement->account_idt);
+
+        return response()->download(storage_path('app/documents/' . $movement->account_id . '/' . $fileId), $document->original_name);
+    }
+
     public function create($account)
     {
         $movement = new Movement;
@@ -44,7 +63,6 @@ class MovementController extends Controller
             return redirect()->action('DashboardController@index', Auth::user());
         }
 
-        
         $movement = $request->validate([
             'type' => 'required',
             'movement_category_id' => 'required',

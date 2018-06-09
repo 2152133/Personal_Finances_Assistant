@@ -66,12 +66,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $name = request()->file('profile_photo');
+        $photo = request()->file('profile_photo');
 
-        if ($name != null) {
+        if ($photo != null) {
             if ($name->isValid()) {
-                $name = $name->hashname();
-                Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $name);
+                $photo = $name->hashname();
+                Storage::disk('public')->putFileAs('profiles', request()->file('profile_photo'), $photo);
             }
         }
 
@@ -80,7 +80,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'phone' => $data['phone'],
-            'profile_photo' => $name,
+            'profile_photo' => $photo,
         ]);
 
 
